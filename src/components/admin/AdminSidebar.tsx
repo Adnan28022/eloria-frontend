@@ -92,7 +92,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
                   layoutId="activeSidebar"
                   className="absolute inset-0 bg-terracotta rounded-xl shadow-[0_0_15px_rgba(194,142,121,0.4)]"
                   initial={false}
-                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                  transition={{ type: "spring" as any as any, stiffness: 350, damping: 30 }}
                 />
               )}
               
@@ -131,7 +131,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
               layoutId="activeSidebar"
               className="absolute inset-0 bg-terracotta rounded-xl shadow-[0_0_15px_rgba(194,142,121,0.4)]"
               initial={false}
-              transition={{ type: "spring", stiffness: 350, damping: 30 }}
+              transition={{ type: "spring" as any as any, stiffness: 350, damping: 30 }}
             />
           )}
           <div className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 relative z-10 ${
@@ -198,7 +198,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
       <motion.aside
         initial={{ x: "-100%" }}
         animate={{ x: isMobileOpen ? 0 : "-100%" }}
-        transition={{ type: "spring", damping: 25, stiffness: 200 }}
+        transition={{ type: "spring" as any as any, damping: 25, stiffness: 200 }}
         className="fixed inset-y-0 left-0 w-[280px] z-[100] md:hidden"
       >
         {Content}

@@ -13,7 +13,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  show: { opacity: 1, y: 0, transition: { type: "spring" as any as any, stiffness: 300, damping: 24 } }
 };
 
 // Count-up animation hook
@@ -130,7 +130,7 @@ export default function AnalyticsPage() {
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: `${Math.max((d.revenue / maxRevenue) * 100, 2)}%` }}
-                  transition={{ duration: 1, delay: i * 0.05 + 0.3, type: "spring" }}
+                  transition={{ duration: 1, delay: i * 0.05 + 0.3, type: "spring" as any as any }}
                   className="w-full max-w-[48px] bg-gradient-to-t from-terracotta/40 to-terracotta rounded-t-lg group-hover/bar:from-terracotta group-hover/bar:to-terracotta/90 transition-colors relative z-10"
                 />
                 <span className="text-[10px] font-medium text-charcoal/50 uppercase tracking-widest mt-4 shrink-0">{d.month}</span>
@@ -195,7 +195,7 @@ export default function AnalyticsPage() {
                 <motion.div
                   initial={{ height: 0 }}
                   animate={{ height: `${Math.max((dayData.value / maxDaySales) * 100, 5)}%` }}
-                  transition={{ duration: 1, delay: 0.8 + (i * 0.05), type: "spring" }}
+                  transition={{ duration: 1, delay: 0.8 + (i * 0.05), type: "spring" as any as any }}
                   className="w-full max-w-[32px] bg-charcoal/10 rounded-t-md group-hover/day:bg-charcoal transition-colors relative z-10"
                 />
                 <span className="text-[10px] font-medium text-charcoal/50 uppercase tracking-widest mt-3 shrink-0">{dayData.day.substring(0,3)}</span>

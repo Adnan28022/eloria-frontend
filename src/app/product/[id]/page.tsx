@@ -79,7 +79,7 @@ export default function ProductDetailPage() {
           <div className="flex flex-col-reverse lg:flex-row gap-6">
             {/* Thumbnails */}
             <div className="flex lg:flex-col gap-4 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 hide-scrollbar shrink-0">
-              {gallery.map((img, idx) => (
+              {gallery.map((img: string, idx: number) => (
                 <button
                   key={idx}
                   onClick={() => setActiveImage(idx)}
@@ -186,7 +186,7 @@ export default function ProductDetailPage() {
                 >
                   {activeTab === "benefits" && (
                     <ul className="space-y-3">
-                      {product.benefits.map((benefit, i) => (
+                      {product.benefits.map((benefit: string, i: number) => (
                         <li key={i} className="flex gap-3 items-start">
                           <Check className="w-4 h-4 mt-0.5 text-terracotta shrink-0" />
                           <span>{benefit}</span>
@@ -198,7 +198,7 @@ export default function ProductDetailPage() {
                     <div className="space-y-4">
                       <p>Key Actives:</p>
                       <div className="flex flex-wrap gap-2">
-                        {product.ingredients.map((ing, i) => (
+                        {product.ingredients.map((ing: any, i: number) => (
                           <span key={i} className="px-3 py-1.5 border border-charcoal/10 rounded-full text-xs">
                             {ing}
                           </span>

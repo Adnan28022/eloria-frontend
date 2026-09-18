@@ -56,7 +56,7 @@ export default function CartPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 }}
-                  key={item.product._id || item.product.id || index} 
+                  key={(item.product._id || item.product.id || "") || index} 
                   className="flex gap-6 pb-8 border-b border-charcoal/10"
                 >
                   <div className="w-24 md:w-32 aspect-[3/4] bg-[#f4efe6] overflow-hidden rounded-lg shrink-0">
@@ -77,14 +77,14 @@ export default function CartPage() {
                     <div className="flex justify-between items-end">
                       <div className="flex items-center border border-charcoal/20 rounded-md">
                         <button 
-                          onClick={() => updateQuantity(item.product._id || item.product.id, item.quantity - 1)}
+                          onClick={() => updateQuantity((item.product._id || item.product.id || ""), item.quantity - 1)}
                           className="p-2 hover:text-terracotta transition-colors"
                         >
                           <Minus className="w-3 h-3" />
                         </button>
                         <span className="w-8 text-center text-xs">{item.quantity}</span>
                         <button 
-                          onClick={() => updateQuantity(item.product._id || item.product.id, item.quantity + 1)}
+                          onClick={() => updateQuantity((item.product._id || item.product.id || ""), item.quantity + 1)}
                           className="p-2 hover:text-terracotta transition-colors"
                         >
                           <Plus className="w-3 h-3" />
@@ -92,7 +92,7 @@ export default function CartPage() {
                       </div>
                       
                       <button 
-                        onClick={() => removeFromCart(item.product._id || item.product.id)}
+                        onClick={() => removeFromCart((item.product._id || item.product.id || ""))}
                         className="text-charcoal/40 hover:text-red-500 transition-colors uppercase text-[10px] tracking-widest flex items-center gap-1"
                       >
                         <Trash2 className="w-3 h-3" /> Remove

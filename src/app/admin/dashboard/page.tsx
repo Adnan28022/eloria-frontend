@@ -56,7 +56,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  show: { opacity: 1, y: 0, transition: { type: "spring" as any as any, stiffness: 300, damping: 24 } }
 };
 
 export default function AdminDashboard() {
@@ -157,7 +157,7 @@ export default function AdminDashboard() {
                   <motion.div
                     initial={{ height: 0 }}
                     animate={{ height: `${Math.max((d.revenue / maxRevenue) * 100, 2)}%` }}
-                    transition={{ duration: 1, delay: i * 0.05 + 0.5, type: "spring" }}
+                    transition={{ duration: 1, delay: i * 0.05 + 0.5, type: "spring" as any as any }}
                     className="w-full max-w-[40px] bg-gradient-to-t from-charcoal/80 to-charcoal rounded-t-md group-hover/bar:from-terracotta group-hover/bar:to-terracotta/80 transition-colors relative z-10 shadow-sm"
                   />
                   <span className="text-[9px] text-charcoal/50 uppercase tracking-widest mt-4 shrink-0">{d.month}</span>

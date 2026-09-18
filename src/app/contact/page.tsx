@@ -6,7 +6,7 @@ import { Footer } from "@/components/layout/Footer";
 import { PageHero } from "@/components/ui/PageHero";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { Mail, MapPin, Phone, Instagram, CheckCircle2, ChevronDown } from "lucide-react";
+import { Mail, MapPin, Phone, CheckCircle2, ChevronDown } from "lucide-react";
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({ name: "", email: "", subject: "", message: "" });

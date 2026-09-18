@@ -25,7 +25,7 @@ const draw = {
     pathLength: 1,
     opacity: 1,
     transition: {
-      pathLength: { delay: 0.8, type: "spring", duration: 1.5, bounce: 0 },
+      pathLength: { delay: 0.8, type: "spring" as any as any, duration: 1.5, bounce: 0 },
       opacity: { delay: 0.8, duration: 0.01 },
     },
   },

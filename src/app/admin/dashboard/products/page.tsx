@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Search, Edit2, Trash2, X, Download, Image as ImageIcon, Tag, Package, LayoutGrid, LayoutList } from "lucide-react";
+import { Plus, Search, Edit2, Trash2, X, Download, Image as ImageIcon, Tag, Package, LayoutGrid, LayoutList, Layers, ArrowRight, Upload, DollarSign } from "lucide-react";
 import { adminApi, formatPKR } from "@/lib/api";
 import toast from "react-hot-toast";
 
@@ -13,7 +13,7 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 24 } }
+  show: { opacity: 1, y: 0, transition: { type: "spring" as any as any, stiffness: 300, damping: 24 } }
 };
 
 export default function AdminProductsPage() {

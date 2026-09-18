@@ -13,7 +13,7 @@ import { Footer } from "@/components/layout/Footer";
 export default function BundlesPublicPage() {
   const [bundles, setBundles] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const { addItem } = useCart();
+  const { addToCart } = useCart();
 
   useEffect(() => {
     publicApi.getBundles()
@@ -23,14 +23,13 @@ export default function BundlesPublicPage() {
   }, []);
 
   const handleAddToCart = (bundle: any) => {
-    addItem({
+    addToCart({
       _id: bundle._id,
       name: bundle.name,
       price: bundle.price,
       image: bundle.image,
-      slug: bundle.slug,
-      isBundle: true
-    }, 1);
+      slug: bundle.slug
+    });
     toast.success("Bundle added to cart!");
   };
 

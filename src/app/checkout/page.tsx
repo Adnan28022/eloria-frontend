@@ -168,14 +168,14 @@ export default function CheckoutPage() {
             <motion.div
               initial={{ scale: 0.9, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              transition={{ type: "spring" as any as any, damping: 25, stiffness: 300 }}
               className="bg-ivory p-10 md:p-16 rounded-3xl max-w-lg w-full text-center shadow-2xl relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-full h-2 bg-terracotta" />
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring", bounce: 0.5 }}
+                transition={{ delay: 0.2, type: "spring" as any as any, bounce: 0.5 }}
                 className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6"
               >
                 <CheckCircle2 className="w-10 h-10" />

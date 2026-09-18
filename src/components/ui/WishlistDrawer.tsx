@@ -26,7 +26,7 @@ export const WishlistDrawer: React.FC = () => {
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            transition={{ type: "spring" as any as any, damping: 25, stiffness: 200 }}
             className="fixed inset-y-0 right-0 w-full md:w-[400px] bg-ivory shadow-2xl z-[101] flex flex-col border-l border-charcoal/10"
           >
             <div className="flex items-center justify-between p-6 border-b border-charcoal/10 bg-[#fcfbf9]">
