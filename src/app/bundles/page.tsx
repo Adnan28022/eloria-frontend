@@ -29,7 +29,7 @@ export default function BundlesPublicPage() {
       price: bundle.price,
       image: bundle.image,
       slug: bundle.slug
-    });
+    } as any);
     toast.success("Bundle added to cart!");
   };
 
