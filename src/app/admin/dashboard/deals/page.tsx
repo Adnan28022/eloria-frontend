@@ -95,7 +95,7 @@ export default function PromosPage() {
   };
 
   return (
-    <div className="p-6 md:p-10 min-h-screen bg-[#f4efe6]">
+    <div className="p-6 md:p-10 min-h-screen">
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-10">
         <div>
