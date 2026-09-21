@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useMemo } from "react";
-import { X, Upload, CheckCircle2, Image as ImageIcon, Tag, LayoutList, Eye, Percent, Package } from "lucide-react";
+import { X, Upload, CheckCircle2, Image as ImageIcon, Tag, LayoutList, Eye, Percent, Package, Wand2, Loader2 } from "lucide-react";
 import { adminApi, formatPKR } from "@/lib/api";
 import toast from "react-hot-toast";
 import { motion, AnimatePresence } from "framer-motion";
@@ -14,6 +14,7 @@ interface BundleModalProps {
 
 export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalProps) {
   const [loading, setLoading] = useState(false);
+  const [generatingImage, setGeneratingImage] = useState(false);
   const [products, setProducts] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState<"form" | "preview">("form");
   const [discount, setDiscount] = useState<string>(bundle?.discount || "");
@@ -60,6 +61,78 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
       }));
     }
   }, [discountedPrice, originalTotal]);
+
+  // Generate bundle collage image from selected product images via Cloudinary
+  const generateBundleImage = async () => {
+    if (selectedProducts.length === 0) {
+      return toast.error("Select at least one product first");
+    }
+    setGeneratingImage(true);
+    const toastId = toast.loading("Generating bundle image...");
+    try {
+      // Use first product image as base, or create a canvas collage via fetch-blob-upload
+      const productImages = selectedProducts
+        .map(p => p.image || p.images?.[0])
+        .filter(Boolean)
+        .slice(0, 4);
+
+      if (productImages.length === 0) {
+        toast.error("Selected products have no images", { id: toastId });
+        return;
+      }
+
+      // Fetch all images as blobs and create a canvas collage
+      const canvas = document.createElement("canvas");
+      const cols = productImages.length <= 1 ? 1 : 2;
+      const rows = Math.ceil(productImages.length / cols);
+      const tileSize = 400;
+      canvas.width = cols * tileSize;
+      canvas.height = rows * tileSize;
+      const ctx = canvas.getContext("2d");
+      if (!ctx) throw new Error("Canvas not supported");
+
+      ctx.fillStyle = "#F4EFE6";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      await Promise.all(
+        productImages.map((src, i) => new Promise<void>((resolve) => {
+          const img = new Image();
+          img.crossOrigin = "anonymous";
+          img.onload = () => {
+            const col = i % cols;
+            const row = Math.floor(i / cols);
+            // Cover-fit the image into tile
+            const scale = Math.max(tileSize / img.width, tileSize / img.height);
+            const sw = tileSize / scale;
+            const sh = tileSize / scale;
+            const sx = (img.width - sw) / 2;
+            const sy = (img.height - sh) / 2;
+            ctx.drawImage(img, sx, sy, sw, sh, col * tileSize, row * tileSize, tileSize, tileSize);
+            resolve();
+          };
+          img.onerror = () => resolve();
+          img.src = src;
+        }))
+      );
+
+      // Convert canvas to blob and upload
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          toast.error("Failed to generate image", { id: toastId });
+          setGeneratingImage(false);
+          return;
+        }
+        const file = new File([blob], `bundle-${Date.now()}.jpg`, { type: "image/jpeg" });
+        const res = await adminApi.uploadImages([file]);
+        setFormData(prev => ({ ...prev, image: res.data.urls[0] }));
+        toast.success("Bundle image generated!", { id: toastId });
+        setGeneratingImage(false);
+      }, "image/jpeg", 0.9);
+    } catch (err: any) {
+      toast.error(err.message || "Failed to generate image", { id: toastId });
+      setGeneratingImage(false);
+    }
+  };
 
   const generateSlug = (name: string) =>
     name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
@@ -242,7 +315,8 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
                           className="w-full bg-[#fcfbf9] border border-charcoal/10 rounded-xl py-3 pl-11 pr-4 text-sm outline-none focus:border-terracotta transition-all shadow-sm"
                           placeholder="URL or click upload..." />
                       </div>
-                      <label className="bg-charcoal text-ivory px-4 rounded-xl flex items-center justify-center cursor-pointer hover:bg-terracotta transition-colors shadow-sm shrink-0">
+                      {/* Upload Button */}
+                      <label className="bg-charcoal text-ivory px-4 rounded-xl flex items-center justify-center cursor-pointer hover:bg-terracotta transition-colors shadow-sm shrink-0 gap-1.5 text-xs font-bold">
                         <Upload className="w-4 h-4" />
                         <input type="file" accept="image/*" className="hidden" onChange={async (e) => {
                           if (!e.target.files?.length) return;
@@ -251,10 +325,31 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
                             const res = await adminApi.uploadImages([e.target.files[0]]);
                             setFormData(prev => ({ ...prev, image: res.data.urls[0] }));
                             toast.success("Image uploaded", { id: toastId });
-                          } catch { toast.error("Upload failed", { id: toastId }); }
+                          } catch (err: any) {
+                            toast.error(err.message || "Upload failed", { id: toastId });
+                          }
                         }} />
                       </label>
+                      {/* Generate Collage Button */}
+                      <button
+                        type="button"
+                        onClick={generateBundleImage}
+                        disabled={generatingImage || selectedProducts.length === 0}
+                        title={selectedProducts.length === 0 ? "Select products first" : "Generate collage from selected product images"}
+                        className="bg-terracotta text-white px-4 rounded-xl flex items-center justify-center gap-1.5 text-xs font-bold hover:bg-terracotta/80 transition-colors shadow-sm shrink-0 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {generatingImage
+                          ? <Loader2 className="w-4 h-4 animate-spin" />
+                          : <Wand2 className="w-4 h-4" />
+                        }
+                        Generate
+                      </button>
                     </div>
+                    {selectedProducts.length > 0 && !formData.image && (
+                      <p className="text-[10px] text-terracotta/70 mt-1">
+                        ✨ Click "Generate" to auto-create a collage from {selectedProducts.length} selected product{selectedProducts.length > 1 ? "s" : ""}
+                      </p>
+                    )}
                     {formData.image && (
                       <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} className="mt-3 rounded-xl overflow-hidden border border-charcoal/10 shadow-sm">
                         <img src={formData.image} alt="Preview" className="w-full h-32 object-cover" onError={e => (e.currentTarget.style.display = 'none')} />
