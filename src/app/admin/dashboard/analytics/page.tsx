@@ -36,19 +36,41 @@ function useCountUp(target: number, duration = 1500) {
 function StatCard({ label, value, rawValue, trend, icon: Icon, isCurrency = false }: any) {
   const animated = useCountUp(rawValue);
   return (
-    <motion.div variants={itemVariants} className="bg-white p-6 rounded-3xl shadow-[4px_0_24px_rgba(0,0,0,0.02)] border border-charcoal/5 hover:shadow-[4px_10px_30px_rgba(0,0,0,0.04)] transition-all duration-300 relative overflow-hidden group">
-      <div className="absolute -right-6 -top-6 w-24 h-24 bg-terracotta/5 rounded-full blur-2xl group-hover:bg-terracotta/10 transition-colors" />
+    <motion.div 
+      variants={itemVariants} 
+      whileHover={{ y: -4, transition: { duration: 0.2 } }}
+      className="bg-white/85 backdrop-blur-xl p-6 rounded-3xl shadow-[0_4px_25px_rgba(44,37,35,0.03)] border border-white/80 hover:border-terracotta/20 hover:shadow-[0_14px_35px_rgba(194,142,121,0.12)] transition-all duration-300 relative overflow-hidden group"
+    >
+      {/* Decorative 3D Glossy Floating Bubble in Top Right Corner */}
+      <div className="absolute -top-3 -right-3 w-16 h-16 pointer-events-none z-10">
+        <motion.div 
+          animate={{ scale: [1, 1.2, 1], opacity: [0.35, 0.65, 0.35] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute inset-0 bg-gradient-to-br from-terracotta/30 via-amber-200/20 to-transparent rounded-full blur-xl"
+        />
+        <motion.div
+          animate={{ y: [0, -3, 0], rotate: [0, 4, 0] }}
+          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+          className="w-11 h-11 ml-auto rounded-full bg-gradient-to-br from-white/95 via-white/40 to-terracotta/25 backdrop-blur-md border border-white/80 shadow-[inset_0_2px_5px_rgba(255,255,255,0.9),0_6px_16px_rgba(194,142,121,0.22)] relative overflow-hidden group-hover:scale-110 transition-transform duration-300"
+        >
+          <div className="absolute top-1.5 left-2 w-3 h-1.5 bg-white/90 rounded-full -rotate-45 blur-[0.4px]" />
+          <div className="absolute bottom-1.5 right-2 w-2 h-1 bg-terracotta/40 rounded-full blur-[0.4px]" />
+        </motion.div>
+      </div>
+
       <div className="flex justify-between items-start mb-4 relative z-10">
-        <div className="w-12 h-12 rounded-2xl bg-[#fcfbf9] border border-charcoal/5 flex items-center justify-center">
-          <Icon className="w-6 h-6 text-terracotta" />
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-terracotta/10 to-amber-50/50 border border-terracotta/15 flex items-center justify-center text-terracotta shadow-xs group-hover:scale-110 transition-transform duration-300">
+          <Icon className="w-6 h-6" />
         </div>
-        <div className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full ${trend >= 0 ? 'bg-green-50 text-green-600 border border-green-100' : 'bg-red-50 text-red-600 border border-red-100'}`}>
+        <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow-xs ${
+          trend >= 0 ? 'bg-green-50/80 text-green-700 border border-green-200/60' : 'bg-red-50/80 text-red-700 border border-red-200/60'
+        }`}>
           {trend >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
           {Math.abs(trend).toFixed(1)}%
         </div>
       </div>
-      <p className="text-charcoal/50 text-xs uppercase tracking-widest mb-1 font-medium relative z-10">{label}</p>
-      <h3 className="font-serif text-3xl text-charcoal relative z-10">
+      <p className="text-charcoal/50 text-[10px] uppercase tracking-widest mb-1.5 font-bold relative z-10">{label}</p>
+      <h3 className="font-serif text-3xl md:text-4xl text-charcoal relative z-10">
         {isCurrency ? formatPKR(animated) : animated.toLocaleString()}
       </h3>
     </motion.div>
