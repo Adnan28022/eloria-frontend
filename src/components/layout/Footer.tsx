@@ -189,7 +189,9 @@ export const Footer: React.FC = () => {
               Terms & Conditions
             </Link>
             <Link href="/privacy" className="hover:text-terracotta transition-colors">
-              Cookie Policy
+              Cookie Policy 
+
+              
             </Link>
           </div>
         </div>
