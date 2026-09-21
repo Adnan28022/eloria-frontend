@@ -3,41 +3,17 @@
 import React, { useState } from "react";
 import { AdminSidebar } from "@/components/admin/AdminSidebar";
 import { AdminTopbar } from "@/components/admin/AdminTopbar";
-import { motion } from "framer-motion";
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-[#FAF7F2] text-charcoal relative overflow-hidden">
-      {/* Subtle Ambient Background Gradient Lighting for All Admin Pages */}
-      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-        <motion.div
-          animate={{
-            x: [0, 50, -30, 0],
-            y: [0, -40, 20, 0],
-            scale: [1, 1.12, 0.92, 1],
-          }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -top-24 right-1/4 w-[420px] h-[420px] bg-[#F5DFD5]/40 rounded-full blur-[110px]"
-        />
-        <motion.div
-          animate={{
-            x: [0, -60, 40, 0],
-            y: [0, 50, -30, 0],
-            scale: [1, 1.15, 0.9, 1],
-          }}
-          transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute top-1/2 -left-20 w-[480px] h-[480px] bg-[#F9EBDD]/45 rounded-full blur-[130px]"
-        />
-        <motion.div
-          animate={{
-            x: [0, 35, -45, 0],
-            y: [0, -35, 45, 0],
-          }}
-          transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -bottom-24 right-10 w-[400px] h-[400px] bg-[#EDE1D4]/45 rounded-full blur-[110px]"
-        />
+    <div className="min-h-screen flex bg-[#FAF8F5] text-charcoal relative overflow-hidden">
+      {/* Zero-Lag GPU-Accelerated Static Ambient Gradients for Smooth 60fps Experience */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none z-0 opacity-60">
+        <div className="absolute -top-32 right-1/4 w-[480px] h-[480px] bg-gradient-to-br from-[#F5DFD5] to-transparent rounded-full blur-[80px] transform-gpu" />
+        <div className="absolute top-1/3 -left-24 w-[500px] h-[500px] bg-gradient-to-tr from-[#F8EADA] to-transparent rounded-full blur-[90px] transform-gpu" />
+        <div className="absolute -bottom-24 right-16 w-[420px] h-[420px] bg-gradient-to-tl from-[#EDE1D4] to-transparent rounded-full blur-[80px] transform-gpu" />
       </div>
 
       <AdminSidebar isMobileOpen={isMobileOpen} setMobileOpen={setIsMobileOpen} />

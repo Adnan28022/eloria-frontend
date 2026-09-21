@@ -41,21 +41,13 @@ function StatCard({ label, value, rawValue, trend, icon: Icon, isCurrency = fals
       whileHover={{ y: -4, transition: { duration: 0.2 } }}
       className="bg-white/85 backdrop-blur-xl p-6 rounded-3xl shadow-[0_4px_25px_rgba(44,37,35,0.03)] border border-white/80 hover:border-terracotta/20 hover:shadow-[0_14px_35px_rgba(194,142,121,0.12)] transition-all duration-300 relative overflow-hidden group"
     >
-      {/* Decorative 3D Glossy Floating Bubble in Top Right Corner */}
+      {/* Decorative 3D Glossy Floating Bubble in Top Right Corner (GPU Accelerated) */}
       <div className="absolute -top-3 -right-3 w-16 h-16 pointer-events-none z-10">
-        <motion.div 
-          animate={{ scale: [1, 1.2, 1], opacity: [0.35, 0.65, 0.35] }}
-          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute inset-0 bg-gradient-to-br from-terracotta/30 via-amber-200/20 to-transparent rounded-full blur-xl"
-        />
-        <motion.div
-          animate={{ y: [0, -3, 0], rotate: [0, 4, 0] }}
-          transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
-          className="w-11 h-11 ml-auto rounded-full bg-gradient-to-br from-white/95 via-white/40 to-terracotta/25 backdrop-blur-md border border-white/80 shadow-[inset_0_2px_5px_rgba(255,255,255,0.9),0_6px_16px_rgba(194,142,121,0.22)] relative overflow-hidden group-hover:scale-110 transition-transform duration-300"
-        >
+        <div className="absolute inset-0 bg-gradient-to-br from-terracotta/30 via-amber-200/20 to-transparent rounded-full blur-lg transform-gpu" />
+        <div className="w-11 h-11 ml-auto rounded-full bg-gradient-to-br from-white/95 via-white/40 to-terracotta/25 backdrop-blur-md border border-white/80 shadow-[inset_0_2px_5px_rgba(255,255,255,0.9),0_6px_16px_rgba(194,142,121,0.22)] relative overflow-hidden group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300 transform-gpu">
           <div className="absolute top-1.5 left-2 w-3 h-1.5 bg-white/90 rounded-full -rotate-45 blur-[0.4px]" />
           <div className="absolute bottom-1.5 right-2 w-2 h-1 bg-terracotta/40 rounded-full blur-[0.4px]" />
-        </motion.div>
+        </div>
       </div>
 
       <div className="flex justify-between items-start mb-4 relative z-10">
