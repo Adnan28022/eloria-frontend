@@ -1,19 +1,27 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { useCart } from "@/context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
-import { CheckCircle2, ChevronLeft } from "lucide-react";
+import { CheckCircle2, ChevronLeft, Tag } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
-export default function CheckoutPage() {
+function CheckoutContent() {
   const { cartTotal, cart, cartCount, clearCart } = useCart();
   const [isSuccess, setIsSuccess] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const couponCode = searchParams.get("coupon") || "";
+  const discountAmount = Number(searchParams.get("discount")) || 0;
+  const finalTotal = Math.max(0, cartTotal - discountAmount);
+
+  const formatPKR = (amt: number) =>
+    amt.toLocaleString("en-PK", { style: "currency", currency: "PKR" }).replace("PKR", "Rs");
 
   const handlePlaceOrder = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,8 +48,10 @@ export default function CheckoutPage() {
         quantity: item.quantity,
       })),
       subtotal: cartTotal,
-      shipping: 0, // Free shipping for all products
-      total: cartTotal,
+      shipping: 0,
+      discount: discountAmount,
+      couponCode: couponCode || undefined,
+      total: finalTotal,
     };
 
     try {
@@ -108,7 +118,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <button type="submit" disabled={submitting || cart.length === 0} className="w-full bg-charcoal text-ivory py-5 rounded-xl uppercase tracking-[0.2em] text-xs font-medium hover:bg-terracotta hover:-translate-y-0.5 transition-all shadow-xl disabled:opacity-50">
-                  {submitting ? 'Placing Order...' : `Place Order — ${(cartTotal).toLocaleString('en-PK', { style: 'currency', currency: 'PKR' }).replace('PKR', 'Rs')}`}
+                  {submitting ? 'Placing Order...' : `Place Order — ${formatPKR(finalTotal)}`}
                 </button>
               </form>
             </div>
@@ -130,7 +140,7 @@ export default function CheckoutPage() {
                         <p className="font-serif">{item.product.name}</p>
                         <p className="text-charcoal/50 text-[10px] uppercase tracking-widest mt-1">Qty: {item.quantity}</p>
                       </div>
-                      <p>{(item.product.price * item.quantity).toLocaleString('en-PK', { style: 'currency', currency: 'PKR' }).replace('PKR', 'Rs')}</p>
+                      <p>{formatPKR(item.product.price * item.quantity)}</p>
                     </div>
                   </div>
                 ))}
@@ -139,8 +149,16 @@ export default function CheckoutPage() {
               <div className="space-y-4 mb-8 text-sm text-charcoal/80 border-t border-charcoal/10 pt-6">
                 <div className="flex justify-between">
                   <span>Subtotal ({cartCount} items)</span>
-                  <span>{(cartTotal).toLocaleString('en-PK', { style: 'currency', currency: 'PKR' }).replace('PKR', 'Rs')}</span>
+                  <span>{formatPKR(cartTotal)}</span>
                 </div>
+                {discountAmount > 0 && (
+                  <div className="flex justify-between text-terracotta">
+                    <span className="flex items-center gap-1">
+                      <Tag className="w-3 h-3" /> Discount ({couponCode})
+                    </span>
+                    <span>- {formatPKR(discountAmount)}</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span>Shipping</span>
                   <span className="text-terracotta font-medium uppercase tracking-widest text-[10px]">Free</span>
@@ -149,14 +167,19 @@ export default function CheckoutPage() {
 
               <div className="pt-6 border-t border-charcoal/10 flex justify-between items-center">
                 <span className="font-serif text-xl">Total</span>
-                <span className="font-serif text-2xl">{(cartTotal).toLocaleString('en-PK', { style: 'currency', currency: 'PKR' }).replace('PKR', 'Rs')}</span>
+                <div className="text-right">
+                  {discountAmount > 0 && (
+                    <p className="text-charcoal/40 text-xs line-through">{formatPKR(cartTotal)}</p>
+                  )}
+                  <span className="font-serif text-2xl">{formatPKR(finalTotal)}</span>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </main>
 
-      {/* Success Modal (SweetAlert Replacement) */}
+      {/* Success Modal */}
       <AnimatePresence>
         {isSuccess && (
           <motion.div
@@ -168,14 +191,14 @@ export default function CheckoutPage() {
             <motion.div
               initial={{ scale: 0.9, y: 20, opacity: 0 }}
               animate={{ scale: 1, y: 0, opacity: 1 }}
-              transition={{ type: "spring" as any as any, damping: 25, stiffness: 300 }}
+              transition={{ type: "spring" as any, damping: 25, stiffness: 300 }}
               className="bg-ivory p-10 md:p-16 rounded-3xl max-w-lg w-full text-center shadow-2xl relative overflow-hidden"
             >
               <div className="absolute top-0 left-0 w-full h-2 bg-terracotta" />
               <motion.div
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                transition={{ delay: 0.2, type: "spring" as any as any, bounce: 0.5 }}
+                transition={{ delay: 0.2, type: "spring" as any, bounce: 0.5 }}
                 className="w-20 h-20 bg-green-50 text-green-600 rounded-full flex items-center justify-center mx-auto mb-6"
               >
                 <CheckCircle2 className="w-10 h-10" />
@@ -202,5 +225,13 @@ export default function CheckoutPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function CheckoutPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-ivory flex items-center justify-center">Loading checkout...</div>}>
+      <CheckoutContent />
+    </Suspense>
   );
 }
