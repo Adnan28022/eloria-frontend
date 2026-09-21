@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, Search, ShoppingBag, X, ChevronRight, Heart } from "lucide-react";
+import { Menu, Search, ShoppingBag, X, ChevronRight, Heart, Sparkles, Phone, Mail, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useCart } from "@/context/CartContext";
@@ -12,7 +12,7 @@ import { publicApi } from "@/lib/api";
 const NAV_LINKS = [
   { href: "/", label: "Home" },
   { href: "/shop", label: "Shop" },
-  { href: "/bundles", label: "Bundles & Kits" },
+  { href: "/bundles", label: "Bundles & Kits", badge: "Save" },
   { href: "/about", label: "About" },
   { href: "/contact", label: "Contact" },
 ];
@@ -20,9 +20,11 @@ const NAV_LINKS = [
 export const Navbar: React.FC = () => {
   const { cartCount, openCart } = useCart();
   const { wishlistCount, openWishlist } = useWishlist();
+  const pathname = usePathname();
   
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [allProducts, setAllProducts] = useState<any[]>([]);
 
@@ -36,6 +38,23 @@ export const Navbar: React.FC = () => {
   useEffect(() => {
     publicApi.getProducts().then(res => setAllProducts(res.data.data)).catch(() => {});
   }, []);
+
+  // Close mobile menu on page navigation
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [pathname]);
+
+  // Lock background scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "unset";
+    }
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, [isMobileMenuOpen]);
 
   const searchResults = allProducts.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 4);
   const textColor = isScrolled ? "text-charcoal" : "text-ivory";
@@ -57,6 +76,17 @@ export const Navbar: React.FC = () => {
             isScrolled ? "h-16 md:h-20" : "h-20 md:h-28"
           }`}
         >
+          {/* Mobile Left: Hamburger Menu Button */}
+          <div className="flex md:hidden items-center z-10">
+            <button
+              onClick={() => setIsMobileMenuOpen(true)}
+              aria-label="Open Navigation Menu"
+              className={`p-2 -ml-2 rounded-xl transition-colors duration-200 ${textColor} hover:text-terracotta active:scale-95`}
+            >
+              <Menu className="w-6 h-6" />
+            </button>
+          </div>
+
           {/* Desktop Nav Links */}
           <nav
             className={`hidden md:flex items-center space-x-8 text-[11px] uppercase tracking-[0.25em] font-medium transition-colors duration-500 ${textColor}`}
@@ -68,12 +98,17 @@ export const Navbar: React.FC = () => {
                 className="relative group hover:text-terracotta transition-colors"
               >
                 <span>{item.label}</span>
+                {item.badge && (
+                  <span className="ml-1.5 px-1.5 py-0.5 bg-terracotta text-white text-[8px] rounded-full font-bold">
+                    {item.badge}
+                  </span>
+                )}
                 <span className="absolute left-0 -bottom-1.5 w-0 h-px bg-terracotta transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
           </nav>
 
-          {/* Logo */}
+          {/* Logo (Centered) */}
           <Link
             href="/"
             className="absolute left-1/2 -translate-x-1/2 flex items-center group"
@@ -82,12 +117,12 @@ export const Navbar: React.FC = () => {
               src={isScrolled ? "/logo-bg.png" : "/logo-white.png"}
               alt="Eloria Skincare"
               className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
-                isScrolled ? "h-9 md:h-11" : "h-11 md:h-16"
+                isScrolled ? "h-8 sm:h-9 md:h-11" : "h-10 sm:h-11 md:h-16"
               }`}
             />
           </Link>
 
-          {/* Right Actions */}
+          {/* Desktop Right Actions */}
           <div
             className={`hidden md:flex items-center space-x-5 transition-colors duration-500 ${textColor}`}
           >
@@ -127,14 +162,36 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Mobile Right Icons */}
-          <div className={`flex md:hidden items-center gap-3 ${textColor}`}>
-            <button onClick={() => setIsSearchOpen(true)} aria-label="Search" className="p-1">
+          <div className={`flex md:hidden items-center gap-2 ${textColor} z-10`}>
+            <button 
+              onClick={() => setIsSearchOpen(true)} 
+              aria-label="Search" 
+              className="p-2 hover:text-terracotta transition-colors"
+            >
               <Search className="w-5 h-5" />
             </button>
-            <button onClick={openCart} aria-label="Bag" className="relative p-1">
+
+            <button 
+              onClick={openWishlist} 
+              aria-label="Wishlist" 
+              className="relative p-2 hover:text-terracotta transition-colors"
+            >
+              <Heart className="w-5 h-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute 0 top-1 right-1 w-3.5 h-3.5 bg-terracotta text-white rounded-full text-[8px] flex items-center justify-center font-bold">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+
+            <button 
+              onClick={openCart} 
+              aria-label="Bag" 
+              className="relative p-2 hover:text-terracotta transition-colors"
+            >
               <ShoppingBag className="w-5 h-5" />
               {cartCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-3.5 h-3.5 bg-terracotta text-ivory rounded-full text-[8px] flex items-center justify-center font-bold">
+                <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-terracotta text-white rounded-full text-[9px] flex items-center justify-center font-bold shadow-xs">
                   {cartCount}
                 </span>
               )}
@@ -142,6 +199,131 @@ export const Navbar: React.FC = () => {
           </div>
         </div>
       </motion.header>
+
+      {/* Luxury Mobile Navigation Drawer */}
+      <AnimatePresence>
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="fixed inset-0 bg-charcoal/60 backdrop-blur-md z-[100] md:hidden"
+            />
+
+            {/* Slide-out Drawer */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 28, stiffness: 260 }}
+              className="fixed inset-y-0 left-0 w-[85%] max-w-[340px] bg-[#FAF7F2] text-charcoal shadow-2xl z-[101] flex flex-col justify-between overflow-hidden md:hidden border-r border-[#E8E0D5]"
+            >
+              {/* Drawer Header */}
+              <div className="p-6 border-b border-[#E8E0D5] flex items-center justify-between bg-white/50">
+                <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+                  <img src="/logo-bg.png" alt="Eloria" className="h-9 w-auto object-contain" />
+                </Link>
+                <button
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="p-2 rounded-full text-charcoal/60 hover:text-charcoal hover:bg-charcoal/5 transition-colors"
+                  aria-label="Close menu"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              {/* Navigation Links */}
+              <div className="flex-1 py-8 px-6 overflow-y-auto space-y-1">
+                <p className="text-[10px] uppercase tracking-[0.25em] text-charcoal/40 font-bold mb-4 px-2">
+                  Navigation
+                </p>
+
+                {NAV_LINKS.map((item, idx) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <motion.div
+                      key={item.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.05 * idx + 0.1 }}
+                    >
+                      <Link
+                        href={item.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`flex items-center justify-between py-3.5 px-4 rounded-2xl transition-all ${
+                          isActive
+                            ? "bg-terracotta text-white font-semibold shadow-[0_4px_16px_rgba(194,142,121,0.35)]"
+                            : "text-charcoal/80 hover:bg-white hover:text-terracotta"
+                        }`}
+                      >
+                        <span className="font-serif text-xl tracking-wide">{item.label}</span>
+                        <div className="flex items-center gap-2">
+                          {item.badge && (
+                            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                              isActive ? "bg-white text-terracotta" : "bg-terracotta/15 text-terracotta"
+                            }`}>
+                              {item.badge}
+                            </span>
+                          )}
+                          <ChevronRight className={`w-4 h-4 ${isActive ? "text-white" : "text-charcoal/30"}`} />
+                        </div>
+                      </Link>
+                    </motion.div>
+                  );
+                })}
+
+                <div className="pt-6 mt-6 border-t border-[#E8E0D5]/70 space-y-2">
+                  {/* Quick Cart & Wishlist Links */}
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      openCart();
+                    }}
+                    className="w-full flex items-center justify-between py-3 px-4 rounded-xl text-charcoal/70 hover:bg-white transition-colors text-sm font-medium"
+                  >
+                    <span className="flex items-center gap-3">
+                      <ShoppingBag className="w-4 h-4 text-terracotta" /> Shopping Bag
+                    </span>
+                    <span className="bg-charcoal text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {cartCount} items
+                    </span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setIsMobileMenuOpen(false);
+                      openWishlist();
+                    }}
+                    className="w-full flex items-center justify-between py-3 px-4 rounded-xl text-charcoal/70 hover:bg-white transition-colors text-sm font-medium"
+                  >
+                    <span className="flex items-center gap-3">
+                      <Heart className="w-4 h-4 text-terracotta" /> Saved Wishlist
+                    </span>
+                    <span className="bg-terracotta/15 text-terracotta text-[10px] font-bold px-2 py-0.5 rounded-full">
+                      {wishlistCount}
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Drawer Footer */}
+              <div className="p-6 bg-white/70 border-t border-[#E8E0D5] space-y-3">
+                <div className="flex items-center gap-2 text-xs text-charcoal/60">
+                  <Sparkles className="w-3.5 h-3.5 text-terracotta shrink-0" />
+                  <span>Free Express Delivery Across Pakistan</span>
+                </div>
+                <div className="text-[11px] text-charcoal/50">
+                  Natural & Cruelty-Free Luxury Skincare
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       {/* Search Fullscreen Overlay */}
       <AnimatePresence>
