@@ -49,7 +49,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
     { label: "Orders", href: "/admin/dashboard/orders", icon: ShoppingCart, badge: activeOrders > 0 ? activeOrders : undefined },
     { label: "Customers", href: "/admin/dashboard/customers", icon: Users },
     { label: "Discounts", href: "/admin/dashboard/discounts", icon: TicketPercent },
-    { label: "Deals & Promos", href: "/admin/dashboard/deals", icon: Zap },
+    { label: "Promos", href: "/admin/dashboard/deals", icon: Zap },
     { label: "Categories", href: "/admin/dashboard/categories", icon: Tags },
   ];
 
