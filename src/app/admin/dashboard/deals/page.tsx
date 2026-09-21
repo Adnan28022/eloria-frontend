@@ -306,17 +306,22 @@ export default function PromosPage() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { label: "Total Codes", value: discounts.length, icon: Tag, color: "text-charcoal" },
-          { label: "Active", value: discounts.filter(d => d.isActive && !isExpired(d.expiryDate) && !isLimitReached(d)).length, icon: CheckCircle2, color: "text-green-600" },
-          { label: "Limit Reached", value: discounts.filter(d => isLimitReached(d)).length, icon: AlertCircle, color: "text-amber-600" },
-          { label: "Expired", value: discounts.filter(d => isExpired(d.expiryDate)).length, icon: Calendar, color: "text-red-500" },
-        ].map(stat => (
-          <div key={stat.label} className="bg-white rounded-2xl p-4 border border-charcoal/5 shadow-sm">
-            <div className={`flex items-center gap-2 ${stat.color} mb-1`}>
+          { label: "Total Codes", value: discounts.length, icon: Tag, color: "text-charcoal", bg: "from-terracotta/15 to-amber-50/50" },
+          { label: "Active", value: discounts.filter(d => d.isActive && !isExpired(d.expiryDate) && !isLimitReached(d)).length, icon: CheckCircle2, color: "text-green-600", bg: "from-green-200/30 to-emerald-50/50" },
+          { label: "Limit Reached", value: discounts.filter(d => isLimitReached(d)).length, icon: AlertCircle, color: "text-amber-600", bg: "from-amber-200/30 to-orange-50/50" },
+          { label: "Expired", value: discounts.filter(d => isExpired(d.expiryDate)).length, icon: Calendar, color: "text-red-500", bg: "from-red-200/30 to-rose-50/50" },
+        ].map((stat, idx) => (
+          <div key={stat.label} className="bg-white/85 backdrop-blur-xl rounded-3xl p-5 border border-white/80 shadow-[0_4px_25px_rgba(44,37,35,0.03)] hover:shadow-[0_10px_30px_rgba(194,142,121,0.08)] transition-all relative overflow-hidden group">
+            <motion.div
+              animate={{ scale: [1, 1.25, 1], opacity: [0.25, 0.5, 0.25] }}
+              transition={{ duration: 7 + idx, repeat: Infinity, ease: "easeInOut" }}
+              className={`absolute -right-6 -top-6 w-20 h-20 bg-gradient-to-br ${stat.bg} rounded-full blur-xl pointer-events-none`}
+            />
+            <div className={`flex items-center gap-2 ${stat.color} mb-1 relative z-10`}>
               <stat.icon className="w-4 h-4" />
               <p className="text-[10px] uppercase tracking-widest font-bold">{stat.label}</p>
             </div>
-            <p className="font-serif text-3xl text-charcoal">{stat.value}</p>
+            <p className="font-serif text-3xl text-charcoal relative z-10">{stat.value}</p>
           </div>
         ))}
       </div>
@@ -327,16 +332,16 @@ export default function PromosPage() {
           <motion.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="w-8 h-8 border-2 border-charcoal/20 border-t-terracotta rounded-full" />
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-24 bg-white rounded-2xl border border-charcoal/5">
+        <div className="text-center py-24 bg-white/85 backdrop-blur-xl rounded-3xl border border-white/80 shadow-sm">
           <Zap className="w-12 h-12 text-charcoal/20 mx-auto mb-4" />
           <h3 className="font-serif text-xl mb-2 text-charcoal">No Promo Codes</h3>
           <p className="text-sm text-charcoal/50 mb-6">Create your first promo code to offer discounts.</p>
-          <button onClick={() => { setShowForm(true); handleGenerate(); }} className="bg-charcoal text-ivory px-6 py-2.5 rounded-xl text-xs uppercase tracking-widest font-medium hover:bg-terracotta transition-all shadow-lg inline-flex items-center gap-2">
+          <button onClick={() => { setShowForm(true); handleGenerate(); }} className="bg-charcoal text-ivory px-6 py-2.5 rounded-xl text-xs uppercase tracking-widest font-bold hover:bg-terracotta transition-all shadow-lg inline-flex items-center gap-2">
             <Plus className="w-4 h-4" /> Create Promo Code
           </button>
         </div>
       ) : (
-        <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <motion.div variants={containerVariants} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filtered.map(d => {
             const expired = isExpired(d.expiryDate);
             const limitReached = isLimitReached(d);
@@ -350,7 +355,8 @@ export default function PromosPage() {
               <motion.div
                 key={d._id}
                 variants={itemVariants}
-                className={`bg-white rounded-2xl border shadow-sm overflow-hidden transition-all ${statusOk ? "border-charcoal/5" : "border-charcoal/5 opacity-75"}`}
+                whileHover={{ y: -4, transition: { duration: 0.2 } }}
+                className={`bg-white/85 backdrop-blur-xl rounded-3xl border shadow-[0_4px_25px_rgba(44,37,35,0.03)] hover:shadow-[0_16px_40px_rgba(194,142,121,0.12)] hover:border-terracotta/30 overflow-hidden transition-all duration-300 relative group ${statusOk ? "border-white/80" : "border-white/50 opacity-80"}`}
               >
                 {/* Coupon top bar */}
                 <div className={`h-1.5 w-full ${

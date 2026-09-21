@@ -130,39 +130,36 @@ export default function AdminOrdersPage() {
 
       {/* Stats Widgets */}
       <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-3xl border border-charcoal/5 shadow-sm flex items-start justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-charcoal/50 font-bold mb-1">Total Orders</p>
-            <h3 className="font-serif text-2xl text-charcoal">{stats.totalCount}</h3>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-charcoal/5 flex items-center justify-center text-charcoal"><Receipt className="w-5 h-5" /></div>
-        </div>
-        <div className="bg-white p-5 rounded-3xl border border-charcoal/5 shadow-sm flex items-start justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-charcoal/50 font-bold mb-1">Pending Processing</p>
-            <h3 className="font-serif text-2xl text-orange-600">{stats.pending}</h3>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-orange-50 flex items-center justify-center text-orange-600"><Clock className="w-5 h-5" /></div>
-        </div>
-        <div className="bg-white p-5 rounded-3xl border border-charcoal/5 shadow-sm flex items-start justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-charcoal/50 font-bold mb-1">Total Delivered</p>
-            <h3 className="font-serif text-2xl text-green-600">{stats.delivered}</h3>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-green-50 flex items-center justify-center text-green-600"><CheckCircle2 className="w-5 h-5" /></div>
-        </div>
-        <div className="bg-white p-5 rounded-3xl border border-charcoal/5 shadow-sm flex items-start justify-between">
-          <div>
-            <p className="text-[10px] uppercase tracking-widest text-charcoal/50 font-bold mb-1">Returned Value</p>
-            <h3 className="font-serif text-2xl text-red-600">{formatPKR(stats.returnedAmount)}</h3>
-            <p className="text-xs text-charcoal/50 mt-1">{stats.returnedCount} orders returned</p>
-          </div>
-          <div className="w-10 h-10 rounded-full bg-red-50 flex items-center justify-center text-red-600"><PackageX className="w-5 h-5" /></div>
-        </div>
+        {[
+          { label: "Total Orders", value: stats.totalCount, icon: Receipt, color: "text-charcoal", bg: "from-terracotta/15 to-amber-50/50" },
+          { label: "Pending Processing", value: stats.pending, icon: Clock, color: "text-amber-600", bg: "from-amber-200/30 to-orange-50/50" },
+          { label: "Total Delivered", value: stats.delivered, icon: CheckCircle2, color: "text-green-600", bg: "from-green-200/30 to-emerald-50/50" },
+          { label: "Returned Value", value: formatPKR(stats.returnedAmount), sub: `${stats.returnedCount} returned`, icon: PackageX, color: "text-red-600", bg: "from-red-200/30 to-rose-50/50" }
+        ].map((item, idx) => (
+          <motion.div 
+            key={idx}
+            whileHover={{ y: -3, transition: { duration: 0.2 } }}
+            className="bg-white/85 backdrop-blur-xl p-5 rounded-3xl border border-white/80 shadow-[0_4px_25px_rgba(44,37,35,0.03)] hover:shadow-[0_12px_35px_rgba(194,142,121,0.1)] flex items-start justify-between relative overflow-hidden group transition-all"
+          >
+            <motion.div
+              animate={{ scale: [1, 1.25, 1], opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 7 + idx, repeat: Infinity, ease: "easeInOut" }}
+              className={`absolute -right-6 -top-6 w-24 h-24 bg-gradient-to-br ${item.bg} rounded-full blur-xl pointer-events-none`}
+            />
+            <div className="relative z-10">
+              <p className="text-[10px] uppercase tracking-widest text-charcoal/50 font-bold mb-1">{item.label}</p>
+              <h3 className={`font-serif text-2xl ${item.color}`}>{item.value}</h3>
+              {item.sub && <p className="text-[10px] text-charcoal/40 mt-1 font-medium">{item.sub}</p>}
+            </div>
+            <div className={`w-11 h-11 rounded-2xl bg-gradient-to-br ${item.bg} border border-charcoal/5 flex items-center justify-center ${item.color} shadow-xs relative z-10 group-hover:scale-110 transition-transform`}>
+              <item.icon className="w-5 h-5" />
+            </div>
+          </motion.div>
+        ))}
       </motion.div>
 
       {/* Main Content Area */}
-      <motion.div variants={itemVariants} className="bg-white rounded-3xl shadow-[4px_0_24px_rgba(0,0,0,0.02)] border border-charcoal/5 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-[4px_10px_30px_rgba(0,0,0,0.04)]">
+      <motion.div variants={itemVariants} className="bg-white/85 backdrop-blur-xl rounded-3xl shadow-[0_4px_30px_rgba(44,37,35,0.03)] border border-white/80 overflow-hidden flex flex-col transition-all duration-300 hover:shadow-[0_12px_40px_rgba(194,142,121,0.08)]">
         
         {/* Toolbar & Tabs */}
         <div className="border-b border-charcoal/5 bg-[#fcfbf9]">

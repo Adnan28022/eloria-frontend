@@ -18,7 +18,8 @@ import {
   TicketPercent,
   Store,
   Zap,
-  Gift
+  Gift,
+  Sparkles
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -59,23 +60,63 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
   };
 
   const Content = (
-    <div className="flex flex-col h-full bg-[#161413] text-[#FBF3EC]/70 border-r border-[#FBF3EC]/5 shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
-      {/* Header */}
-      <div className="h-32 flex items-center justify-center px-4 border-b border-[#FBF3EC]/5 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-terracotta/10 blur-[40px] rounded-full" />
-        
-        {!isCollapsed && (
-          <img src="/logo-bg.png" alt="Eloria" className="h-12 w-auto object-contain relative z-10 drop-shadow-lg brightness-0 invert" />
-        )}
-        {isCollapsed && (
-          <img src="/logo-bg.png" alt="Eloria" className="h-8 w-auto object-contain relative z-10 brightness-0 invert" />
-        )}
+    <div className="relative flex flex-col h-full bg-[#FAF7F2] text-[#2C2523] border-r border-[#EBE3D7] shadow-[4px_0_30px_rgba(44,37,35,0.04)] overflow-hidden">
+      
+      {/* Animated Ambient Light Background Blobs */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
+        <motion.div
+          animate={{
+            x: [0, 25, -15, 0],
+            y: [0, 40, 20, 0],
+            scale: [1, 1.15, 0.95, 1],
+          }}
+          transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-16 -left-16 w-56 h-56 bg-[#F4DCD3]/60 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            x: [0, -30, 20, 0],
+            y: [0, -40, -15, 0],
+            scale: [1, 1.2, 0.9, 1],
+          }}
+          transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-1/2 -right-20 w-64 h-64 bg-[#F8E8DA]/70 rounded-full blur-3xl"
+        />
+        <motion.div
+          animate={{
+            x: [0, 20, -20, 0],
+            y: [0, -25, 35, 0],
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -bottom-20 left-4 w-60 h-60 bg-[#E8DDD2]/50 rounded-full blur-3xl"
+        />
+      </div>
+
+      {/* Header / Logo */}
+      <div className="h-28 flex items-center justify-center px-4 border-b border-[#EBE3D7]/70 relative z-10 shrink-0">
+        <div className="relative flex items-center justify-center">
+          {!isCollapsed ? (
+            <div className="flex flex-col items-center">
+              <span className="font-serif text-2xl tracking-[0.25em] uppercase text-charcoal font-medium">ELORIA</span>
+              <span className="text-[9px] uppercase tracking-[0.35em] text-terracotta font-semibold -mt-0.5">Admin Studio</span>
+            </div>
+          ) : (
+            <div className="w-10 h-10 rounded-xl bg-terracotta/10 border border-terracotta/20 flex items-center justify-center text-terracotta font-serif font-bold text-lg shadow-sm">
+              E
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Nav Items */}
-      <div className="flex-1 py-8 px-4 flex flex-col gap-2 overflow-y-auto hide-scrollbar">
-        <div className="text-[10px] uppercase tracking-widest text-[#FBF3EC]/30 mb-2 px-4 font-semibold">
-          {!isCollapsed && "Core Management"}
+      <div className="flex-1 py-6 px-3 flex flex-col gap-1.5 overflow-y-auto hide-scrollbar relative z-10">
+        <div className="text-[10px] uppercase tracking-widest text-charcoal/40 mb-2 px-3 font-bold flex items-center gap-1.5">
+          {!isCollapsed && (
+            <>
+              <Sparkles className="w-3 h-3 text-terracotta/70" />
+              <span>Management</span>
+            </>
+          )}
         </div>
         
         {navItems.map((item) => {
@@ -90,25 +131,25 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
               {isActive && (
                 <motion.div 
                   layoutId="activeSidebar"
-                  className="absolute inset-0 bg-terracotta rounded-xl shadow-[0_0_15px_rgba(194,142,121,0.4)]"
+                  className="absolute inset-0 bg-gradient-to-r from-terracotta to-[#C8846D] rounded-xl shadow-[0_4px_16px_rgba(194,142,121,0.35)]"
                   initial={false}
-                  transition={{ type: "spring" as any as any, stiffness: 350, damping: 30 }}
+                  transition={{ type: "spring", stiffness: 380, damping: 32 }}
                 />
               )}
               
-              <div className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 relative z-10 ${
+              <div className={`flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all duration-200 relative z-10 ${
                 isActive 
-                  ? "text-white font-medium" 
-                  : "hover:text-[#FBF3EC] hover:bg-[#FBF3EC]/5"
+                  ? "text-white font-semibold" 
+                  : "text-charcoal/70 hover:text-charcoal hover:bg-white/60 hover:shadow-sm"
               } ${isCollapsed ? "justify-center" : "justify-start"}`}>
-                <item.icon className={`w-5 h-5 shrink-0 transition-colors duration-300 ${isActive ? "text-white" : "text-[#FBF3EC]/50 group-hover:text-terracotta"}`} />
+                <item.icon className={`w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? "text-white" : "text-charcoal/50 group-hover:text-terracotta"}`} />
                 
                 {!isCollapsed && (
-                  <span className="text-sm tracking-wide flex-grow">{item.label}</span>
+                  <span className="text-xs tracking-wide flex-grow">{item.label}</span>
                 )}
                 
                 {!isCollapsed && mounted && item.badge && (
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm transition-colors duration-300 ${isActive ? 'bg-white text-terracotta' : 'bg-[#FBF3EC]/10 text-[#FBF3EC]'}`}>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shadow-sm transition-colors ${isActive ? 'bg-white text-terracotta' : 'bg-terracotta/15 text-terracotta'}`}>
                     {item.badge}
                   </span>
                 )}
@@ -117,8 +158,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
           );
         })}
 
-        <div className="mt-8 text-[10px] uppercase tracking-widest text-[#FBF3EC]/30 mb-2 px-4 font-semibold">
-          {!isCollapsed && "System & Preferences"}
+        <div className="mt-6 text-[10px] uppercase tracking-widest text-charcoal/40 mb-2 px-3 font-bold">
+          {!isCollapsed && "System"}
         </div>
         
         <Link 
@@ -129,41 +170,41 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
           {pathname === "/admin/dashboard/settings" && (
             <motion.div 
               layoutId="activeSidebar"
-              className="absolute inset-0 bg-terracotta rounded-xl shadow-[0_0_15px_rgba(194,142,121,0.4)]"
+              className="absolute inset-0 bg-gradient-to-r from-terracotta to-[#C8846D] rounded-xl shadow-[0_4px_16px_rgba(194,142,121,0.35)]"
               initial={false}
-              transition={{ type: "spring" as any as any, stiffness: 350, damping: 30 }}
+              transition={{ type: "spring", stiffness: 380, damping: 32 }}
             />
           )}
-          <div className={`flex items-center gap-4 px-4 py-3.5 rounded-xl transition-all duration-300 relative z-10 ${
+          <div className={`flex items-center gap-3.5 px-3.5 py-3 rounded-xl transition-all duration-200 relative z-10 ${
             pathname === "/admin/dashboard/settings"
-              ? "text-white font-medium" 
-              : "hover:text-[#FBF3EC] hover:bg-[#FBF3EC]/5"
+              ? "text-white font-semibold" 
+              : "text-charcoal/70 hover:text-charcoal hover:bg-white/60 hover:shadow-sm"
           } ${isCollapsed ? "justify-center" : "justify-start"}`}>
-            <Settings className={`w-5 h-5 shrink-0 transition-colors duration-300 ${pathname === "/admin/dashboard/settings" ? "text-white" : "text-[#FBF3EC]/50 group-hover:text-terracotta"}`} />
-            {!isCollapsed && <span className="text-sm tracking-wide">Settings</span>}
+            <Settings className={`w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-110 ${pathname === "/admin/dashboard/settings" ? "text-white" : "text-charcoal/50 group-hover:text-terracotta"}`} />
+            {!isCollapsed && <span className="text-xs tracking-wide">Settings</span>}
           </div>
         </Link>
       </div>
 
       {/* User Profile / Collapse Toggle */}
-      <div className="p-4 border-t border-[#FBF3EC]/5 mt-auto">
+      <div className="p-3 border-t border-[#EBE3D7]/70 mt-auto relative z-10 bg-white/40 backdrop-blur-sm">
         {!isCollapsed && (
-          <div className="flex items-center gap-3 px-4 py-3 mb-2 rounded-xl bg-[#FBF3EC]/5 border border-[#FBF3EC]/5">
-            <div className="w-8 h-8 rounded-full bg-terracotta/20 flex items-center justify-center text-terracotta font-bold text-xs shrink-0">
-              AD
+          <div className="flex items-center gap-3 px-3 py-2.5 mb-2 rounded-xl bg-white/70 border border-[#EBE3D7] shadow-sm">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-terracotta to-[#C8846D] text-white flex items-center justify-center font-serif font-bold text-xs shadow-sm shrink-0">
+              E
             </div>
             <div className="flex flex-col overflow-hidden">
-              <span className="text-xs font-semibold text-[#FBF3EC] truncate">Admin User</span>
-              <span className="text-[10px] text-[#FBF3EC]/40 truncate">admin@eloria.com</span>
+              <span className="text-xs font-semibold text-charcoal truncate">Eloria Admin</span>
+              <span className="text-[10px] text-charcoal/50 truncate">store@eloria.com</span>
             </div>
           </div>
         )}
         
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={`w-full flex items-center p-3 rounded-xl hover:bg-[#FBF3EC]/5 transition-colors text-[#FBF3EC]/50 hover:text-[#FBF3EC] ${isCollapsed ? "justify-center" : "justify-between"}`}
+          className={`w-full flex items-center p-2.5 rounded-xl hover:bg-white/80 transition-all text-charcoal/60 hover:text-charcoal border border-transparent hover:border-[#EBE3D7] shadow-sm ${isCollapsed ? "justify-center" : "justify-between"}`}
         >
-          {!isCollapsed && <span className="text-[10px] uppercase tracking-widest font-semibold">Collapse Panel</span>}
+          {!isCollapsed && <span className="text-[10px] uppercase tracking-widest font-bold">Collapse</span>}
           <ChevronLeft className={`w-4 h-4 transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`} />
         </button>
       </div>
@@ -177,8 +218,8 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
         initial="expanded"
         animate={isCollapsed ? "collapsed" : "expanded"}
         variants={sidebarVariants}
-        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-        className="hidden md:block h-screen sticky top-0 shrink-0 z-40 overflow-hidden bg-[#161413]"
+        transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+        className="hidden md:block h-screen sticky top-0 shrink-0 z-40 overflow-hidden"
       >
         {Content}
       </motion.aside>
@@ -189,7 +230,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-charcoal/60 backdrop-blur-sm z-[90] md:hidden"
+          className="fixed inset-0 bg-charcoal/40 backdrop-blur-sm z-[90] md:hidden"
           onClick={() => setMobileOpen(false)}
         />
       )}
@@ -198,7 +239,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
       <motion.aside
         initial={{ x: "-100%" }}
         animate={{ x: isMobileOpen ? 0 : "-100%" }}
-        transition={{ type: "spring" as any as any, damping: 25, stiffness: 200 }}
+        transition={{ type: "spring", damping: 25, stiffness: 200 }}
         className="fixed inset-y-0 left-0 w-[280px] z-[100] md:hidden"
       >
         {Content}

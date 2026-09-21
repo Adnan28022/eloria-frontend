@@ -115,8 +115,8 @@ export default function BundlesPage() {
       ) : (
         <motion.div variants={container} initial="hidden" animate="show" className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {filteredBundles.map((bundle) => (
-            <motion.div key={bundle._id} variants={item} className="bg-white rounded-3xl overflow-hidden border border-charcoal/5 shadow-sm hover:shadow-xl hover:border-terracotta/20 transition-all group">
-              
+            <motion.div key={bundle._id} variants={item} className="bg-white/85 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/80 shadow-[0_4px_25px_rgba(44,37,35,0.03)] hover:shadow-[0_16px_40px_rgba(194,142,121,0.14)] hover:border-terracotta/30 transition-all duration-300 group flex flex-col relative">
+              <div className="h-1.5 w-full bg-gradient-to-r from-terracotta via-[#F29F84] to-amber-300 group-hover:h-2 transition-all duration-300" />
               {/* Card Image Header */}
               <div className="h-48 relative bg-[#fcfbf9] overflow-hidden">
                 <img src={bundle.image} alt={bundle.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
