@@ -77,14 +77,26 @@ export const adminApi = {
   uploadImages: async (files: FileList | File[]) => {
     const formData = new FormData();
     Array.from(files).forEach(file => formData.append('images', file));
-    const token = localStorage.getItem('eloria_admin_token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('eloria_admin_token') : null;
     const res = await fetch(`${BASE_URL}/api/admin/products/upload`, {
       method: 'POST',
-      headers: { Authorization: `Bearer ${token}` },
+      headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
+      },
       body: formData
     });
-    if (!res.ok) throw new Error('Upload failed');
-    return { data: await res.json() }; // Wrapping to match axios response structure (res.data.data.urls)
+    if (!res.ok) {
+      const errData = await res.json().catch(() => ({}));
+      throw new Error(errData.error || errData.message || 'Upload failed');
+    }
+    const json = await res.json();
+    const urls = json.urls || json.data?.urls || [];
+    return {
+      data: {
+        urls,
+        data: { urls }
+      }
+    };
   },
 
   // Orders

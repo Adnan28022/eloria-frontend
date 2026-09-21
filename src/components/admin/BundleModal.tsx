@@ -122,11 +122,20 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
           setGeneratingImage(false);
           return;
         }
-        const file = new File([blob], `bundle-${Date.now()}.jpg`, { type: "image/jpeg" });
-        const res = await adminApi.uploadImages([file]);
-        setFormData(prev => ({ ...prev, image: res.data.urls[0] }));
-        toast.success("Bundle image generated!", { id: toastId });
-        setGeneratingImage(false);
+        try {
+          const file = new File([blob], `bundle-${Date.now()}.jpg`, { type: "image/jpeg" });
+          const res = await adminApi.uploadImages([file]);
+          const imgUrl = res.data?.urls?.[0] || res.data?.data?.urls?.[0];
+          setFormData(prev => ({ ...prev, image: imgUrl }));
+          toast.success("Bundle image generated & uploaded!", { id: toastId });
+        } catch {
+          // If network upload fails, fallback to direct data URL so user is never blocked
+          const dataUrl = canvas.toDataURL("image/jpeg", 0.85);
+          setFormData(prev => ({ ...prev, image: dataUrl }));
+          toast.success("Bundle image generated!", { id: toastId });
+        } finally {
+          setGeneratingImage(false);
+        }
       }, "image/jpeg", 0.9);
     } catch (err: any) {
       toast.error(err.message || "Failed to generate image", { id: toastId });
@@ -323,7 +332,8 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
                           const toastId = toast.loading("Uploading image...");
                           try {
                             const res = await adminApi.uploadImages([e.target.files[0]]);
-                            setFormData(prev => ({ ...prev, image: res.data.urls[0] }));
+                            const imgUrl = res.data?.urls?.[0] || res.data?.data?.urls?.[0];
+                            setFormData(prev => ({ ...prev, image: imgUrl }));
                             toast.success("Image uploaded", { id: toastId });
                           } catch (err: any) {
                             toast.error(err.message || "Upload failed", { id: toastId });
