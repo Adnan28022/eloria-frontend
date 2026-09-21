@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { DollarSign, ShoppingBag, Users, TrendingUp, ArrowUpRight, ArrowDownRight, Package, Sparkles } from "lucide-react";
+import { DollarSign, ShoppingBag, Users, ArrowUpRight, ArrowDownRight, Package, Sparkles } from "lucide-react";
 import { adminApi, formatPKR } from "@/lib/api";
 import toast from "react-hot-toast";
 import Link from "next/link";
