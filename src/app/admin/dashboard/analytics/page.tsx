@@ -17,16 +17,24 @@ const itemVariants = {
 };
 
 // Count-up animation hook
-function useCountUp(target: number, duration = 1500) {
-  const [count, setCount] = useState(0);
+function useCountUp(target: any, duration = 1200) {
+  const [count, setCount] = useState<number>(0);
   useEffect(() => {
-    if (target === 0) return;
+    const num = Number(target) || 0;
+    if (num === 0) {
+      setCount(0);
+      return;
+    }
     let start = 0;
-    const step = target / (duration / 16);
+    const step = Math.max(num / (duration / 16), 1);
     const timer = setInterval(() => {
       start += step;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
+      if (start >= num) {
+        setCount(num);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
     }, 16);
     return () => clearInterval(timer);
   }, [target, duration]);
@@ -99,11 +107,33 @@ export default function AnalyticsPage() {
   const [data, setData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
+  const fetchAnalytics = async () => {
+    setLoading(true);
+    try {
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('eloria_admin_token');
+        if (!token) {
+          window.location.href = '/admin/login';
+          return;
+        }
+      }
+
+      const res = await adminApi.getAnalytics();
+      if (res?.data?.data) {
+        setData(res.data.data);
+      }
+    } catch (err: any) {
+      console.error('Failed to load analytics:', err);
+      if (err.response?.status !== 401) {
+        toast.error(err.response?.data?.error || 'Failed to load analytics');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    adminApi.getAnalytics()
-      .then(res => setData(res.data.data))
-      .catch(() => toast.error('Failed to load analytics'))
-      .finally(() => setLoading(false));
+    fetchAnalytics();
   }, []);
 
   const chartData = data?.monthlyData || Array(12).fill({ month: '-', revenue: 0, newCustomers: 0 });
@@ -113,8 +143,23 @@ export default function AnalyticsPage() {
   if (loading) return (
     <div className="space-y-8 max-w-[1600px] mx-auto">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {[...Array(4)].map((_, i) => <div key={i} className="bg-white p-6 rounded-3xl h-36 animate-pulse border border-charcoal/5" />)}
+        {[...Array(4)].map((_, i) => <div key={i} className="bg-white/80 p-6 rounded-3xl h-36 animate-pulse border border-[#EDE4D8]" />)}
       </div>
+    </div>
+  );
+
+  if (!data) return (
+    <div className="min-h-[400px] flex flex-col items-center justify-center bg-white/80 backdrop-blur-md rounded-3xl border border-[#EDE4D8] p-8 text-center my-8 max-w-[1600px] mx-auto">
+      <h3 className="font-serif text-2xl text-charcoal mb-2">Unable to Load Analytics</h3>
+      <p className="text-charcoal/60 text-sm max-w-md mb-6">
+        Could not retrieve store analytics. Please retry or sign in again.
+      </p>
+      <button 
+        onClick={fetchAnalytics} 
+        className="px-6 py-2.5 bg-terracotta text-white font-semibold rounded-xl text-xs uppercase tracking-wider hover:bg-[#b85738] transition-colors shadow-sm"
+      >
+        Retry Loading
+      </button>
     </div>
   );
 

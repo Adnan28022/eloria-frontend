@@ -8,16 +8,24 @@ import toast from "react-hot-toast";
 import Link from "next/link";
 
 // Count-up animation hook
-function useCountUp(target: number, duration = 1500) {
-  const [count, setCount] = useState(0);
+function useCountUp(target: any, duration = 1200) {
+  const [count, setCount] = useState<number>(0);
   useEffect(() => {
-    if (target === 0) return;
+    const num = Number(target) || 0;
+    if (num === 0) {
+      setCount(0);
+      return;
+    }
     let start = 0;
-    const step = target / (duration / 16);
+    const step = Math.max(num / (duration / 16), 1);
     const timer = setInterval(() => {
       start += step;
-      if (start >= target) { setCount(target); clearInterval(timer); }
-      else setCount(Math.floor(start));
+      if (start >= num) {
+        setCount(num);
+        clearInterval(timer);
+      } else {
+        setCount(Math.floor(start));
+      }
     }, 16);
     return () => clearInterval(timer);
   }, [target, duration]);
@@ -104,17 +112,32 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const res = await adminApi.getDashboardStats();
-        setStats(res.data.data);
-      } catch {
-        toast.error('Failed to load dashboard stats');
-      } finally {
-        setLoading(false);
+  const fetchStats = async () => {
+    setLoading(true);
+    try {
+      if (typeof window !== 'undefined') {
+        const token = localStorage.getItem('eloria_admin_token');
+        if (!token) {
+          window.location.href = '/admin/login';
+          return;
+        }
       }
-    };
+
+      const res = await adminApi.getDashboardStats();
+      if (res?.data?.data) {
+        setStats(res.data.data);
+      }
+    } catch (err: any) {
+      console.error('Failed to load dashboard stats:', err);
+      if (err.response?.status !== 401) {
+        toast.error(err.response?.data?.error || 'Failed to load dashboard stats');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
     fetchStats();
   }, []);
 
@@ -127,6 +150,30 @@ export default function AdminDashboard() {
         {[...Array(4)].map((_, i) => (
           <div key={i} className="bg-white/70 p-6 rounded-3xl h-36 animate-pulse border border-charcoal/5" />
         ))}
+      </div>
+    </div>
+  );
+
+  if (!stats) return (
+    <div className="min-h-[400px] flex flex-col items-center justify-center bg-white/80 backdrop-blur-md rounded-3xl border border-[#EDE4D8] p-8 text-center my-8">
+      <Sparkles className="w-10 h-10 text-terracotta mb-4 animate-pulse" />
+      <h3 className="font-serif text-2xl text-charcoal mb-2">Unable to Load Dashboard Stats</h3>
+      <p className="text-charcoal/60 text-sm max-w-md mb-6">
+        There was an issue retrieving real-time metrics. Please retry or sign in again.
+      </p>
+      <div className="flex gap-4">
+        <button 
+          onClick={fetchStats} 
+          className="px-6 py-2.5 bg-terracotta text-white font-semibold rounded-xl text-xs uppercase tracking-wider hover:bg-[#b85738] transition-colors shadow-sm"
+        >
+          Retry Loading
+        </button>
+        <Link 
+          href="/admin/login" 
+          className="px-6 py-2.5 bg-charcoal text-ivory font-semibold rounded-xl text-xs uppercase tracking-wider hover:bg-black transition-colors shadow-sm"
+        >
+          Sign In Again
+        </Link>
       </div>
     </div>
   );

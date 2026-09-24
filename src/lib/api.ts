@@ -159,8 +159,9 @@ export const adminApi = {
 };
 
 // ─── PKR Formatter ────────────────────────────────────────────
-export const formatPKR = (amount: number): string => {
-  return 'Rs ' + amount.toLocaleString('en-PK');
+export const formatPKR = (amount: any): string => {
+  const num = typeof amount === 'number' && !isNaN(amount) ? amount : (Number(amount) || 0);
+  return 'Rs ' + Math.round(num).toLocaleString('en-PK');
 };
 
 export default api;
