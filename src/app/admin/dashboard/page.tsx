@@ -26,37 +26,63 @@ function useCountUp(target: number, duration = 1500) {
 
 function StatCard({ label, rawValue, trend, icon: Icon, isCurrency = false }: any) {
   const animated = useCountUp(rawValue);
+  const isPositive = (trend ?? 0) >= 0;
+
   return (
     <motion.div 
       initial={{ opacity: 0, y: 20 }} 
       animate={{ opacity: 1, y: 0 }} 
-      whileHover={{ y: -4, transition: { duration: 0.2 } }}
-      className="bg-white/85 backdrop-blur-xl p-6 rounded-3xl shadow-[0_4px_25px_rgba(44,37,35,0.03)] border border-white/80 hover:border-terracotta/20 hover:shadow-[0_14px_35px_rgba(194,142,121,0.12)] transition-all duration-300 relative overflow-hidden group"
+      whileHover={{ y: -5, transition: { duration: 0.25, ease: "easeOut" } }}
+      className="bg-white/90 backdrop-blur-xl p-6 rounded-3xl border border-[#EDE4D8] shadow-[0_4px_24px_rgba(40,30,20,0.03)] hover:border-terracotta/35 hover:shadow-[0_16px_36px_rgba(194,142,121,0.14)] transition-all duration-300 relative overflow-hidden group"
     >
-      {/* Decorative 3D Glossy Floating Bubble in Top Right Corner (GPU Accelerated) */}
-      <div className="absolute -top-3 -right-3 w-16 h-16 pointer-events-none z-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-terracotta/30 via-amber-200/20 to-transparent rounded-full blur-lg transform-gpu" />
-        <div className="w-11 h-11 ml-auto rounded-full bg-gradient-to-br from-white/95 via-white/40 to-terracotta/25 backdrop-blur-md border border-white/80 shadow-[inset_0_2px_5px_rgba(255,255,255,0.9),0_6px_16px_rgba(194,142,121,0.22)] relative overflow-hidden group-hover:scale-110 group-hover:-rotate-6 transition-transform duration-300 transform-gpu">
-          <div className="absolute top-1.5 left-2 w-3 h-1.5 bg-white/90 rounded-full -rotate-45 blur-[0.4px]" />
-          <div className="absolute bottom-1.5 right-2 w-2 h-1 bg-terracotta/40 rounded-full blur-[0.4px]" />
-        </div>
-      </div>
-      
+      {/* Light Shimmer Sweep Effect on Hover */}
+      <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 pointer-events-none z-20" />
+
+      {/* Radiant Ambient Corner Glow */}
+      <div className="absolute -top-12 -right-12 w-36 h-36 bg-gradient-to-br from-terracotta/20 via-amber-200/20 to-transparent rounded-full blur-2xl group-hover:scale-125 transition-transform duration-500 pointer-events-none z-0" />
+      <div className="absolute -bottom-8 -left-8 w-28 h-28 bg-[#F5EBE1]/60 rounded-full blur-xl pointer-events-none z-0" />
+
+      {/* Top Bar: Icon + Trend Pill */}
       <div className="flex justify-between items-start mb-4 relative z-10">
-        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-terracotta/10 to-amber-50/50 border border-terracotta/15 flex items-center justify-center text-terracotta shadow-sm group-hover:scale-110 transition-transform duration-300">
-          <Icon className="w-6 h-6" />
+        <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#FAF5F0] to-[#F3EAE0] border border-[#E8DCCF] flex items-center justify-center text-terracotta shadow-xs group-hover:bg-gradient-to-br group-hover:from-terracotta group-hover:to-[#B85738] group-hover:text-white transition-all duration-300">
+          <Icon className="w-5 h-5 transition-transform duration-300 group-hover:scale-110 group-hover:-rotate-3" />
         </div>
-        <div className={`flex items-center gap-1 text-xs font-bold px-2.5 py-1 rounded-full backdrop-blur-md shadow-xs ${
-          trend >= 0 ? 'bg-green-50/80 text-green-700 border border-green-200/60' : 'bg-red-50/80 text-red-700 border border-red-200/60'
+        
+        <div className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-full border shadow-xs transition-colors ${
+          isPositive 
+            ? 'bg-emerald-500/10 text-emerald-700 border-emerald-500/20' 
+            : 'bg-rose-500/10 text-rose-700 border-rose-500/20'
         }`}>
-          {trend >= 0 ? <ArrowUpRight className="w-3 h-3" /> : <ArrowDownRight className="w-3 h-3" />}
-          {Math.abs(trend).toFixed(1)}%
+          {isPositive ? <ArrowUpRight className="w-3.5 h-3.5 text-emerald-600" /> : <ArrowDownRight className="w-3.5 h-3.5 text-rose-600" />}
+          <span>{Math.abs(trend ?? 0).toFixed(1)}%</span>
         </div>
       </div>
-      <p className="text-charcoal/50 text-[10px] uppercase tracking-widest mb-1.5 font-bold relative z-10">{label}</p>
-      <h3 className="font-serif text-3xl md:text-4xl text-charcoal relative z-10">
+
+      {/* Label with Live Dot */}
+      <p className="text-charcoal/50 text-[10px] uppercase tracking-widest font-bold mb-1.5 relative z-10 flex items-center justify-between">
+        <span>{label}</span>
+        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500/80 group-hover:scale-125 transition-transform" />
+      </p>
+
+      {/* Big Counter Value */}
+      <h3 className="font-serif text-3xl md:text-4xl text-charcoal tracking-tight relative z-10">
         {isCurrency ? formatPKR(animated) : animated.toLocaleString()}
       </h3>
+
+      {/* Animated Activity Progress Line */}
+      <div className="w-full bg-[#F3EFEA] h-1.5 rounded-full overflow-hidden mt-4 relative z-10">
+        <motion.div 
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.min(Math.max(isPositive ? 68 + (trend || 0) : 42, 25), 95)}%` }}
+          transition={{ duration: 1.2, delay: 0.2, ease: "easeOut" }}
+          className="h-full bg-gradient-to-r from-terracotta via-[#D97757] to-amber-500 rounded-full group-hover:brightness-110 transition-all"
+        />
+      </div>
+
+      <div className="flex justify-between items-center text-[10px] text-charcoal/40 font-medium mt-2 relative z-10">
+        <span>Live Performance</span>
+        <span className="text-terracotta font-semibold">Real-time</span>
+      </div>
     </motion.div>
   );
 }

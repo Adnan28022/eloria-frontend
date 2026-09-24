@@ -18,7 +18,8 @@ import {
   Store,
   Zap,
   Gift,
-  Sparkles
+  Sparkles,
+  X
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -59,7 +60,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
   };
 
   const Content = (
-    <div className="relative flex flex-col h-full bg-[#12100E] text-[#EDE5DA] border-r border-[#2A231E] shadow-[6px_0_30px_rgba(0,0,0,0.35)] overflow-hidden">
+    <div className="relative flex flex-col h-full bg-[#12100E] text-[#EDE5DA] border-r border-[#241E1A] shadow-none overflow-hidden">
       
       {/* Smooth GPU-Accelerated Animated Ambient Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
@@ -94,19 +95,30 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
       </div>
 
       {/* Header / Big Logo */}
-      <div className="h-24 flex items-center justify-center px-4 border-b border-white/[0.08] relative z-10 shrink-0">
+      <div className="h-24 flex items-center justify-between px-4 border-b border-white/[0.08] relative z-10 shrink-0">
         {!isCollapsed ? (
-          <div className="flex items-center justify-center py-2 px-3.5 rounded-2xl bg-white/95 border border-white/30 shadow-[0_4px_20px_rgba(0,0,0,0.25)] w-full max-w-[220px] transition-transform duration-200 hover:scale-[1.02]">
+          <div className="flex items-center justify-center py-2 px-3.5 rounded-2xl bg-white/95 border border-white/25 shadow-xs flex-1 max-w-[210px] transition-transform duration-200 hover:scale-[1.02]">
             <img 
               src="/logo-bg.png" 
               alt="Eloria" 
-              className="h-11 md:h-12 w-auto object-contain max-w-[190px] drop-shadow-xs" 
+              className="h-11 md:h-12 w-auto object-contain max-w-[180px]" 
             />
           </div>
         ) : (
-          <div className="w-12 h-12 rounded-2xl bg-white/95 border border-white/30 flex items-center justify-center shadow-md overflow-hidden p-1.5 transition-transform duration-200 hover:scale-105">
+          <div className="w-12 h-12 rounded-2xl bg-white/95 border border-white/25 flex items-center justify-center shadow-xs overflow-hidden p-1.5 transition-transform duration-200 hover:scale-105 mx-auto">
             <img src="/logo-bg.png" alt="Eloria" className="w-full h-full object-contain" />
           </div>
+        )}
+
+        {/* Mobile Close Button */}
+        {isMobileOpen && (
+          <button 
+            onClick={() => setMobileOpen(false)}
+            className="md:hidden p-2 rounded-xl text-[#A09388] hover:text-white hover:bg-white/10 transition-colors ml-2"
+            aria-label="Close Sidebar"
+          >
+            <X className="w-5 h-5" />
+          </button>
         )}
       </div>
 
