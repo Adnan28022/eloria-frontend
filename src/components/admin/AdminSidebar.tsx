@@ -59,19 +59,44 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
   };
 
   const Content = (
-    <div className="relative flex flex-col h-full bg-[#EDE5DA] text-[#2C2420] border-r border-[#DECFC0] shadow-[4px_0_24px_rgba(40,30,20,0.06)] overflow-hidden">
+    <div className="relative flex flex-col h-full bg-[#12100E] text-[#EDE5DA] border-r border-[#2A231E] shadow-[6px_0_30px_rgba(0,0,0,0.35)] overflow-hidden">
       
-      {/* GPU-Accelerated Static Ambient Warm Glow */}
+      {/* Smooth GPU-Accelerated Animated Ambient Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-        <div className="absolute -top-12 -left-12 w-48 h-48 bg-terracotta/25 rounded-full blur-2xl transform-gpu" />
-        <div className="absolute top-1/2 -right-16 w-52 h-52 bg-amber-200/30 rounded-full blur-2xl transform-gpu" />
-        <div className="absolute -bottom-16 left-2 w-48 h-48 bg-[#DFCFC0]/60 rounded-full blur-2xl transform-gpu" />
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.15, 1],
+            opacity: [0.35, 0.55, 0.35],
+            x: [0, 8, 0],
+            y: [0, -8, 0]
+          }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute -top-14 -left-12 w-56 h-56 bg-terracotta/30 rounded-full blur-3xl transform-gpu" 
+        />
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.2, 1],
+            opacity: [0.18, 0.32, 0.18],
+            x: [0, -12, 0],
+            y: [0, 12, 0]
+          }}
+          transition={{ duration: 9, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+          className="absolute top-1/2 -right-16 w-52 h-52 bg-amber-500/20 rounded-full blur-3xl transform-gpu" 
+        />
+        <motion.div 
+          animate={{ 
+            scale: [1, 1.1, 1],
+            opacity: [0.25, 0.45, 0.25]
+          }}
+          transition={{ duration: 8, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+          className="absolute -bottom-16 left-4 w-48 h-48 bg-[#9E472A]/25 rounded-full blur-3xl transform-gpu" 
+        />
       </div>
 
       {/* Header / Big Logo */}
-      <div className="h-24 flex items-center justify-center px-4 border-b border-[#DECFC0]/80 relative z-10 shrink-0">
+      <div className="h-24 flex items-center justify-center px-4 border-b border-white/[0.08] relative z-10 shrink-0">
         {!isCollapsed ? (
-          <div className="flex items-center justify-center py-2 px-3.5 rounded-2xl bg-white/75 border border-[#DFD1C2] shadow-xs w-full max-w-[220px]">
+          <div className="flex items-center justify-center py-2 px-3.5 rounded-2xl bg-white/95 border border-white/30 shadow-[0_4px_20px_rgba(0,0,0,0.25)] w-full max-w-[220px] transition-transform duration-200 hover:scale-[1.02]">
             <img 
               src="/logo-bg.png" 
               alt="Eloria" 
@@ -79,7 +104,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
             />
           </div>
         ) : (
-          <div className="w-11 h-11 rounded-2xl bg-white/80 border border-[#DFD1C2] flex items-center justify-center shadow-xs overflow-hidden p-1.5">
+          <div className="w-12 h-12 rounded-2xl bg-white/95 border border-white/30 flex items-center justify-center shadow-md overflow-hidden p-1.5 transition-transform duration-200 hover:scale-105">
             <img src="/logo-bg.png" alt="Eloria" className="w-full h-full object-contain" />
           </div>
         )}
@@ -87,10 +112,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
 
       {/* Nav Items - Inner Scroll Only If Items Overflow */}
       <div className="flex-1 py-4 px-3 flex flex-col gap-1.5 overflow-y-auto hide-scrollbar relative z-10">
-        <div className="text-[10px] uppercase tracking-widest text-charcoal/50 mb-2 px-3 font-bold flex items-center gap-1.5">
+        <div className="text-[10px] uppercase tracking-widest text-[#8C8075] mb-2 px-3 font-bold flex items-center gap-1.5">
           {!isCollapsed && (
             <>
-              <Sparkles className="w-3 h-3 text-terracotta" />
+              <Sparkles className="w-3 h-3 text-terracotta animate-pulse" />
               <span>Studio Navigation</span>
             </>
           )}
@@ -108,30 +133,30 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
               {isActive && (
                 <motion.div 
                   layoutId="activeSidebar"
-                  className="absolute inset-0 bg-gradient-to-r from-terracotta to-[#C97B63] rounded-2xl shadow-[0_4px_16px_rgba(194,142,121,0.38)]"
+                  className="absolute inset-0 bg-gradient-to-r from-terracotta via-[#D97757] to-[#B85738] rounded-2xl shadow-[0_4px_20px_rgba(217,119,87,0.4)] border border-white/20"
                   initial={false}
                   transition={{ type: "spring", stiffness: 450, damping: 35 }}
                 />
               )}
               
-              <div className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-colors duration-150 relative z-10 ${
+              <div className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all duration-200 relative z-10 ${
                 isActive 
                   ? "text-white font-semibold" 
-                  : "text-charcoal/70 hover:text-charcoal hover:bg-white/60"
+                  : "text-[#B8AEA5] hover:text-white hover:bg-white/[0.08]"
               } ${isCollapsed ? "justify-center" : "justify-start"}`}>
-                <item.icon className={`w-4 h-4 shrink-0 transition-transform duration-150 group-hover:scale-110 ${isActive ? "text-white" : "text-charcoal/50 group-hover:text-terracotta"}`} />
+                <item.icon className={`w-4 h-4 shrink-0 transition-all duration-200 group-hover:scale-110 ${isActive ? "text-white drop-shadow-sm" : "text-[#8C8075] group-hover:text-terracotta"}`} />
                 
                 {!isCollapsed && (
                   <span className="text-xs tracking-wide flex-grow truncate">{item.label}</span>
                 )}
 
-                {/* Active Indicator Dot */}
+                {/* Active Indicator Glowing Dot */}
                 {isActive && !isCollapsed && (
-                  <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)] shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)] shrink-0 animate-pulse" />
                 )}
                 
                 {!isCollapsed && mounted && item.badge && !isActive && (
-                  <span className="text-[10px] font-bold px-1.5 py-0.2 rounded-full bg-terracotta/15 text-terracotta shadow-xs">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-terracotta/20 text-[#FFA98F] border border-terracotta/30 shadow-xs">
                     {item.badge}
                   </span>
                 )}
@@ -140,7 +165,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
           );
         })}
 
-        <div className="mt-4 text-[10px] uppercase tracking-widest text-charcoal/50 mb-1 px-3 font-bold">
+        <div className="mt-4 text-[10px] uppercase tracking-widest text-[#8C8075] mb-1 px-3 font-bold">
           {!isCollapsed && "System"}
         </div>
         
@@ -152,42 +177,42 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
           {pathname === "/admin/dashboard/settings" && (
             <motion.div 
               layoutId="activeSidebar"
-              className="absolute inset-0 bg-gradient-to-r from-terracotta to-[#C97B63] rounded-2xl shadow-[0_4px_16px_rgba(194,142,121,0.38)]"
+              className="absolute inset-0 bg-gradient-to-r from-terracotta via-[#D97757] to-[#B85738] rounded-2xl shadow-[0_4px_20px_rgba(217,119,87,0.4)] border border-white/20"
               initial={false}
               transition={{ type: "spring", stiffness: 450, damping: 35 }}
             />
           )}
-          <div className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-colors duration-150 relative z-10 ${
+          <div className={`flex items-center gap-3 px-3 py-2.5 rounded-2xl transition-all duration-200 relative z-10 ${
             pathname === "/admin/dashboard/settings"
               ? "text-white font-semibold" 
-              : "text-charcoal/70 hover:text-charcoal hover:bg-white/60"
+              : "text-[#B8AEA5] hover:text-white hover:bg-white/[0.08]"
           } ${isCollapsed ? "justify-center" : "justify-start"}`}>
-            <Settings className={`w-4 h-4 shrink-0 transition-transform duration-150 group-hover:scale-110 ${pathname === "/admin/dashboard/settings" ? "text-white" : "text-charcoal/50 group-hover:text-terracotta"}`} />
+            <Settings className={`w-4 h-4 shrink-0 transition-all duration-200 group-hover:scale-110 ${pathname === "/admin/dashboard/settings" ? "text-white drop-shadow-sm" : "text-[#8C8075] group-hover:text-terracotta"}`} />
             {!isCollapsed && <span className="text-xs tracking-wide flex-grow">Settings</span>}
             {pathname === "/admin/dashboard/settings" && !isCollapsed && (
-              <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_6px_rgba(255,255,255,0.9)] shrink-0" />
+              <span className="w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,1)] shrink-0 animate-pulse" />
             )}
           </div>
         </Link>
       </div>
 
       {/* User Profile & Collapse Toggle - Fixed Bottom */}
-      <div className="p-3 border-t border-[#DECFC0]/80 shrink-0 relative z-10 bg-white/40 backdrop-blur-sm">
+      <div className="p-3 border-t border-white/[0.08] shrink-0 relative z-10 bg-black/20 backdrop-blur-md">
         {!isCollapsed && (
-          <div className="flex items-center gap-2.5 px-3 py-2.5 mb-2 rounded-2xl bg-white/70 border border-[#DECFC0] shadow-xs">
-            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-terracotta to-[#C97B63] text-white flex items-center justify-center font-serif font-bold text-xs shadow-xs shrink-0">
+          <div className="flex items-center gap-2.5 px-3 py-2.5 mb-2 rounded-2xl bg-white/[0.05] border border-white/[0.08] shadow-xs">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-terracotta to-[#9E472A] text-white flex items-center justify-center font-serif font-bold text-xs shadow-[0_2px_10px_rgba(217,119,87,0.35)] shrink-0">
               E
             </div>
             <div className="flex flex-col overflow-hidden min-w-0">
-              <span className="text-xs font-semibold text-charcoal truncate">Eloria Admin</span>
-              <span className="text-[10px] text-charcoal/50 truncate">store@eloria.com</span>
+              <span className="text-xs font-semibold text-white/90 truncate">Eloria Admin</span>
+              <span className="text-[10px] text-[#8C8075] truncate">store@eloria.com</span>
             </div>
           </div>
         )}
         
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={`w-full flex items-center p-2 rounded-xl hover:bg-white/80 transition-all text-charcoal/60 hover:text-charcoal border border-transparent hover:border-[#DECFC0] shadow-xs ${isCollapsed ? "justify-center" : "justify-between"}`}
+          className={`w-full flex items-center p-2 rounded-xl bg-white/[0.03] hover:bg-white/[0.08] transition-all text-[#A09388] hover:text-white border border-white/[0.05] hover:border-white/15 shadow-xs ${isCollapsed ? "justify-center" : "justify-between"}`}
         >
           {!isCollapsed && <span className="text-[10px] uppercase tracking-widest font-bold">Collapse</span>}
           <ChevronLeft className={`w-4 h-4 transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`} />
