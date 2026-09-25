@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000').replace(/\/$/, '');
+const BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 'https://eloria-backend.vercel.app').replace(/\/$/, '');
 
 const api = axios.create({
   baseURL: BASE_URL,
