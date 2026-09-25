@@ -7,8 +7,10 @@ const api = axios.create({
   headers: { 'Content-Type': 'application/json' },
 });
 
-// Automatically attach JWT token to every request
+// Automatically attach JWT token to every request and prevent 304 CORS cache issues
 api.interceptors.request.use((config) => {
+  config.headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+  config.headers['Pragma'] = 'no-cache';
   if (typeof window !== 'undefined') {
     const token = localStorage.getItem('eloria_admin_token');
     if (token) {
