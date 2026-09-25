@@ -41,7 +41,7 @@ export const Footer: React.FC = () => {
       {/* Top Accent Line */}
       <div className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-terracotta/40 to-transparent z-10" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-12">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-20 pb-28 xl:pb-12">
         
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-charcoal/10">
