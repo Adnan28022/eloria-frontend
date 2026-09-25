@@ -90,10 +90,10 @@ export const Navbar: React.FC = () => {
             isScrolled ? "h-16 md:h-20" : "h-20 md:h-24"
           }`}
         >
-          {/* Mobile & Tablet Header (< xl screens): Clean Logo in Center, Search Left, Wishlist & Cart Right */}
-          <div className="flex xl:hidden items-center justify-between w-full">
-            {/* Left: Menu & Search */}
-            <div className="flex items-center gap-1 sm:gap-2">
+          {/* Left Side: Desktop Nav Links (xl:flex) OR Mobile/Tablet Menu & Search (xl:hidden) */}
+          <div className="flex items-center z-10">
+            {/* Mobile & Tablet Left Controls */}
+            <div className="flex xl:hidden items-center gap-1 sm:gap-2">
               <button
                 onClick={() => setIsMobileMenuOpen(true)}
                 aria-label="Open Navigation Menu"
@@ -110,51 +110,8 @@ export const Navbar: React.FC = () => {
               </button>
             </div>
 
-            {/* Center: Brand Logo (Guaranteed clear, no navitems on top of it) */}
-            <Link href="/" className="flex items-center group py-1">
-              <img
-                src={isScrolled ? "/logo-bg.png" : "/logo-white.png"}
-                alt="Eloria Skincare"
-                className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 ${
-                  isScrolled ? "h-8 sm:h-9 md:h-11" : "h-10 sm:h-11 md:h-13"
-                }`}
-              />
-            </Link>
-
-            {/* Right: Wishlist & Bag */}
-            <div className={`flex items-center gap-1 sm:gap-2 ${textColor}`}>
-              <button
-                onClick={openWishlist}
-                aria-label="Wishlist"
-                className="relative p-2 hover:text-terracotta transition-colors"
-              >
-                <Heart className="w-5 h-5 sm:w-6 sm:h-6" />
-                {wishlistCount > 0 && (
-                  <span className="absolute top-1 right-1 w-3.5 h-3.5 bg-terracotta text-white rounded-full text-[8px] flex items-center justify-center font-bold">
-                    {wishlistCount}
-                  </span>
-                )}
-              </button>
-
-              <button
-                onClick={openCart}
-                aria-label="Cart"
-                className="relative p-2 hover:text-terracotta transition-colors"
-              >
-                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 bg-terracotta text-white rounded-full text-[9px] flex items-center justify-center font-bold shadow-xs">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </div>
-          </div>
-
-          {/* Large Desktop Header (>= xl screens): Nav Links Left, Logo Center, Actions Right */}
-          <div className="hidden xl:flex items-center justify-between w-full">
-            {/* Desktop Nav Links */}
-            <nav className={`flex items-center space-x-7 text-[11px] uppercase tracking-[0.22em] font-medium transition-colors duration-500 ${textColor}`}>
+            {/* Desktop Nav Links (Visible only on xl and above where width is plentiful) */}
+            <nav className={`hidden xl:flex items-center space-x-6 2xl:space-x-8 text-[11px] uppercase tracking-[0.22em] font-medium transition-colors duration-500 ${textColor}`}>
               {NAV_LINKS.map((item) => (
                 <Link
                   key={item.href}
@@ -171,40 +128,60 @@ export const Navbar: React.FC = () => {
                 </Link>
               ))}
             </nav>
+          </div>
 
-            {/* Desktop Logo (Centered) */}
-            <Link href="/" className="flex items-center px-6 group shrink-0">
-              <img
-                src={isScrolled ? "/logo-bg.png" : "/logo-white.png"}
-                alt="Eloria Skincare"
-                className={`w-auto object-contain transition-all duration-500 group-hover:scale-105 ${
-                  isScrolled ? "h-10 md:h-12" : "h-13 md:h-16"
-                }`}
-              />
-            </Link>
+          {/* EXACT Center Brand Logo (Permanently Centered on BOTH Desktop & Mobile/Tablet) */}
+          <Link 
+            href="/" 
+            className="absolute left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 flex items-center justify-center group z-20 pointer-events-auto"
+          >
+            <img
+              src={isScrolled ? "/logo-bg.png" : "/logo-white.png"}
+              alt="Eloria Skincare"
+              className={`w-auto object-contain transition-all duration-300 group-hover:scale-105 ${
+                isScrolled ? "h-8 sm:h-9 md:h-10 xl:h-11" : "h-10 sm:h-11 md:h-13 xl:h-15"
+              }`}
+            />
+          </Link>
 
-            {/* Desktop Right Actions */}
-            <div className={`flex items-center space-x-5 transition-colors duration-500 ${textColor}`}>
-              <button onClick={() => setIsSearchOpen(true)} className="p-2 hover:text-terracotta transition-colors" aria-label="Search">
-                <Search className="w-5 h-5" />
-              </button>
-              <button onClick={openWishlist} className="relative p-2 hover:text-terracotta transition-colors" aria-label="Wishlist">
-                <Heart className="w-5 h-5" />
-                {wishlistCount > 0 && (
-                  <span className="absolute top-1 right-1 w-4 h-4 bg-terracotta text-ivory rounded-full text-[9px] flex items-center justify-center font-bold">
-                    {wishlistCount}
-                  </span>
-                )}
-              </button>
-              <button onClick={openCart} className="relative p-2 hover:text-terracotta transition-colors" aria-label="Cart">
-                <ShoppingBag className="w-5 h-5" />
-                {cartCount > 0 && (
-                  <span className="absolute -top-1 -right-1 w-4 h-4 bg-charcoal text-ivory rounded-full text-[9px] flex items-center justify-center font-bold">
-                    {cartCount}
-                  </span>
-                )}
-              </button>
-            </div>
+          {/* Right Side: Actions (Desktop & Mobile) */}
+          <div className={`flex items-center gap-1 sm:gap-2 xl:space-x-5 transition-colors duration-500 ${textColor} z-10`}>
+            {/* Search (Desktop only, mobile has it on the left) */}
+            <button 
+              onClick={() => setIsSearchOpen(true)} 
+              className="hidden xl:block p-2 hover:text-terracotta transition-colors" 
+              aria-label="Search"
+            >
+              <Search className="w-5 h-5" />
+            </button>
+
+            {/* Wishlist Button */}
+            <button
+              onClick={openWishlist}
+              aria-label="Wishlist"
+              className="relative p-2 hover:text-terracotta transition-colors"
+            >
+              <Heart className="w-5 h-5 sm:w-6 sm:h-6 xl:w-5 xl:h-5" />
+              {wishlistCount > 0 && (
+                <span className="absolute top-1 right-1 w-3.5 h-3.5 xl:w-4 xl:h-4 bg-terracotta text-white rounded-full text-[8px] xl:text-[9px] flex items-center justify-center font-bold">
+                  {wishlistCount}
+                </span>
+              )}
+            </button>
+
+            {/* Cart Button */}
+            <button
+              onClick={openCart}
+              aria-label="Cart"
+              className="relative p-2 hover:text-terracotta transition-colors"
+            >
+              <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 xl:w-5 xl:h-5" />
+              {cartCount > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 xl:-top-1 xl:-right-1 w-4 h-4 bg-terracotta xl:bg-charcoal text-white xl:text-ivory rounded-full text-[9px] flex items-center justify-center font-bold shadow-xs">
+                  {cartCount}
+                </span>
+              )}
+            </button>
           </div>
         </div>
       </motion.header>
