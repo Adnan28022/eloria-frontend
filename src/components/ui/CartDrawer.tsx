@@ -75,6 +75,9 @@ export const CartDrawer: React.FC = () => {
                       <img
                         src={item.product.image || item.product.images?.[0] || "/prod-1.png"}
                         alt={item.product.name}
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                        }}
                         className="w-full h-full object-cover"
                       />
                     </div>

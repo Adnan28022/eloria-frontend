@@ -401,7 +401,14 @@ export const Navbar: React.FC = () => {
                     <Link href={`/product/${product.slug}`} key={product._id || product.id} onClick={() => setIsSearchOpen(false)}>
                       <div className="group cursor-pointer">
                         <div className="aspect-square bg-[#f4efe6] rounded-xl overflow-hidden mb-4">
-                          <img src={product.image || product.images?.[0] || "/prod-1.png"} alt={product.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                          <img 
+                            src={product.image || product.images?.[0] || "/prod-1.png"} 
+                            alt={product.name} 
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                            }}
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                          />
                         </div>
                         <h3 className="font-serif text-charcoal group-hover:text-terracotta transition-colors">{product.name}</h3>
                         <p className="text-[10px] text-charcoal/50 uppercase tracking-widest mt-1">{(product.price).toLocaleString('en-PK', { style: 'currency', currency: 'PKR' }).replace('PKR', 'Rs')}</p>

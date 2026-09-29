@@ -136,7 +136,14 @@ export default function InventoryPage() {
                         <td className="p-4 sm:p-6">
                           <div className="flex items-center gap-4">
                             <div className="w-14 h-14 rounded-xl bg-charcoal/5 overflow-hidden shrink-0 border border-charcoal/10 relative group-hover:shadow-md transition-shadow">
-                              <img src={item.product?.image || '/prod-1.png'} alt="" className="w-full h-full object-cover" />
+                              <img 
+                                src={item.product?.image || '/prod-1.png'} 
+                                alt="" 
+                                onError={(e) => {
+                                  (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                                }}
+                                className="w-full h-full object-cover" 
+                              />
                             </div>
                             <div>
                               <p className="font-medium text-sm text-charcoal truncate max-w-[250px]">{item.productName || item.product?.name}</p>

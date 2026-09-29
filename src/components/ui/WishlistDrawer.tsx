@@ -57,7 +57,14 @@ export const WishlistDrawer: React.FC = () => {
                 wishlist.map((item: any) => (
                   <div key={item._id || item.id} className="flex gap-4 group">
                     <Link href={`/product/${item.slug}`} onClick={closeWishlist} className="w-24 h-32 bg-[#f4efe6] shrink-0 overflow-hidden rounded-lg cursor-pointer block relative">
-                      <img src={item.image || item.images?.[0] || "/prod-1.png"} alt={item.name} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img 
+                        src={item.image || item.images?.[0] || "/prod-1.png"} 
+                        alt={item.name} 
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                        }}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
                     </Link>
                     <div className="flex-grow flex flex-col justify-between py-1">
                       <div>

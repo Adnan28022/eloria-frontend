@@ -107,7 +107,14 @@ export default function CartPage() {
                     className="flex gap-6 pb-8 border-b border-charcoal/10"
                   >
                     <div className="w-24 md:w-32 aspect-[3/4] bg-[#f4efe6] overflow-hidden rounded-lg shrink-0">
-                      <img src={item.product.image || item.product.images?.[0]} alt={item.product.name} className="w-full h-full object-cover" />
+                      <img 
+                        src={item.product.image || item.product.images?.[0] || '/prod-1.png'} 
+                        alt={item.product.name} 
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                        }}
+                        className="w-full h-full object-cover" 
+                      />
                     </div>
 
                     <div className="flex flex-col flex-grow justify-between py-1">

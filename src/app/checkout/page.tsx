@@ -133,7 +133,14 @@ function CheckoutContent() {
                 {cart.map((item) => (
                   <div key={item.product._id || item.product.id} className="flex gap-4 items-center">
                     <div className="w-16 h-20 bg-[#f4efe6] rounded overflow-hidden shrink-0">
-                      <img src={item.product.image || item.product.images?.[0] || "/prod-1.png"} alt={item.product.name} className="w-full h-full object-cover" />
+                      <img 
+                        src={item.product.image || item.product.images?.[0] || "/prod-1.png"} 
+                        alt={item.product.name} 
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                        }}
+                        className="w-full h-full object-cover" 
+                      />
                     </div>
                     <div className="flex-grow flex justify-between items-center text-sm">
                       <div>

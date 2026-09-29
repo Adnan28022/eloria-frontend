@@ -119,7 +119,14 @@ export default function BundlesPage() {
               <div className="h-1.5 w-full bg-gradient-to-r from-terracotta via-[#F29F84] to-amber-300 group-hover:h-2 transition-all duration-300" />
               {/* Card Image Header */}
               <div className="h-48 relative bg-[#fcfbf9] overflow-hidden">
-                <img src={bundle.image} alt={bundle.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" />
+                <img 
+                  src={bundle.image} 
+                  alt={bundle.name} 
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                  }}
+                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 
                 {/* Badges */}
@@ -155,7 +162,14 @@ export default function BundlesPage() {
                   <div className="space-y-2">
                     {bundle.products?.slice(0, 3).map((p: any) => (
                       <div key={p._id} className="flex items-center gap-3">
-                        <img src={p.image || '/prod-1.png'} className="w-8 h-8 rounded-lg object-cover bg-charcoal/5" alt="" />
+                        <img 
+                          src={p.image || '/prod-1.png'} 
+                          onError={(e) => {
+                            (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                          }}
+                          className="w-8 h-8 rounded-lg object-cover bg-charcoal/5" 
+                          alt="" 
+                        />
                         <span className="text-sm font-medium text-charcoal truncate flex-1">{p.name}</span>
                       </div>
                     ))}

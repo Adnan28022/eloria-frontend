@@ -266,7 +266,14 @@ export default function POSPage() {
                     className={`bg-white rounded-2xl border transition-all cursor-pointer overflow-hidden group flex flex-col h-full ${p.stock <= 0 ? 'opacity-50 grayscale border-charcoal/10' : 'border-charcoal/10 hover:border-terracotta/50 hover:shadow-xl hover:shadow-terracotta/10'}`}
                   >
                     <div className="relative aspect-square bg-[#fcfbf9] overflow-hidden">
-                      <img src={p.image || '/prod-1.png'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt={p.name} />
+                      <img 
+                        src={p.image || '/prod-1.png'} 
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                        }}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                        alt={p.name} 
+                      />
                       {p.stock <= 0 && <div className="absolute inset-0 bg-white/60 flex items-center justify-center backdrop-blur-[1px]"><span className="bg-red-500 text-white text-[10px] font-bold uppercase tracking-widest px-3 py-1 rounded-full">Out of Stock</span></div>}
                       <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className="w-8 h-8 rounded-full bg-white/90 backdrop-blur shadow-sm text-terracotta flex items-center justify-center">
@@ -313,7 +320,14 @@ export default function POSPage() {
             ) : (
               cart.map((item) => (
                 <motion.div layout initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, scale: 0.9 }} key={item._id} className="flex gap-3 p-3 bg-white border border-charcoal/10 rounded-2xl group hover:border-terracotta/30 transition-colors shadow-sm">
-                  <img src={item.image || '/prod-1.png'} className="w-16 h-16 rounded-xl object-cover bg-charcoal/5 border border-charcoal/5" alt={item.name} />
+                  <img 
+                    src={item.image || '/prod-1.png'} 
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                    }}
+                    className="w-16 h-16 rounded-xl object-cover bg-charcoal/5 border border-charcoal/5" 
+                    alt={item.name} 
+                  />
                   <div className="flex-1 flex flex-col justify-between py-0.5">
                     <div className="flex justify-between items-start gap-2">
                       <h4 className="text-xs font-medium text-charcoal leading-tight line-clamp-2">{item.name}</h4>

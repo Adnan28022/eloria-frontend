@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { useScrollProgress, mapRange, clamp01 } from '@/hooks/use-scroll-progress';
 import { ShoppingBag, Eye } from 'lucide-react';
 
@@ -135,38 +136,51 @@ export function EssentialSteps() {
                 />
 
                 {/* Left Bubble: Add to Cart */}
-                <button
+                <Link
+                  href="/shop"
                   className="absolute flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-white hover:bg-white transition-all text-[#2b2b2b] hover:scale-110 z-10"
                   style={{
                     transform: `translate(${-90 + offsetDist}px, ${70 - offsetDist}px)`,
                   }}
-                  title="Add to Cart"
+                  title="Shop Products"
                 >
                   <ShoppingBag size={18} />
-                </button>
+                </Link>
 
                 {/* Right Bubble: View */}
-                <button
+                <Link
+                  href="/shop"
                   className="absolute flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-white hover:bg-white transition-all text-[#2b2b2b] hover:scale-110 z-10"
                   style={{
                     transform: `translate(${90 - offsetDist}px, ${70 - offsetDist}px)`,
                   }}
-                  title="View Details"
+                  title="View Products"
                 >
                   <Eye size={18} />
-                </button>
+                </Link>
               </div>
             );
           })}
 
           <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ opacity: finalOpacity }}>
             <div className="relative w-[64%] flex flex-col items-center">
-              <img src="/all.png" alt="Eloria Skincare Set" width={1200} height={1008} loading="lazy" className="w-full h-auto drop-shadow-2xl" />
-              <button
-                className="absolute -bottom-6 border border-charcoal/40 text-charcoal bg-transparent hover:bg-charcoal hover:text-white px-8 py-3 text-xs tracking-[0.25em] uppercase transition-colors rounded-full"
+              <img 
+                src="/all.png" 
+                alt="Eloria Skincare Set" 
+                width={1200} 
+                height={1008} 
+                loading="lazy" 
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                }}
+                className="w-full h-auto drop-shadow-2xl" 
+              />
+              <Link
+                href="/bundles"
+                className="absolute -bottom-6 border border-charcoal/40 text-charcoal bg-white/80 backdrop-blur-sm hover:bg-charcoal hover:text-white px-8 py-3 text-xs tracking-[0.25em] uppercase transition-colors rounded-full shadow-md"
               >
                 Shop The Set
-              </button>
+              </Link>
             </div>
           </div>
         </div>

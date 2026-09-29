@@ -73,6 +73,9 @@ export const PageHero: React.FC<PageHeroProps> = ({
             alt={titleStart}
             loading="eager"
             fetchPriority="high"
+            onError={(e) => {
+              (e.currentTarget as HTMLImageElement).src = "/hero-bg.jfif";
+            }}
             className={`w-full h-full ${imageClassName}`}
           />
         </motion.div>

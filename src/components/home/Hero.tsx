@@ -81,8 +81,8 @@ export const Hero: React.FC = () => {
         {/* Bottom Area: Large Heading + Contact Pill Button */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between w-full gap-8">
           
-          {/* Main Headline matching reference image */}
-          <div className="max-w-3xl space-y-2">
+          {/* Main Headline */}
+          <div className="max-w-3xl space-y-4">
             <h1 className="font-serif text-3xl sm:text-5xl lg:text-[4.2rem] text-ivory leading-[1.08] font-normal tracking-tight">
               <span className="block overflow-hidden pb-1">
                 <motion.span
@@ -105,14 +105,35 @@ export const Hero: React.FC = () => {
                 </motion.span>
               </span>
             </h1>
+
+            {/* Luxury Call-To-Action Buttons */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.6 }}
+              className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2"
+            >
+              <Link
+                href="/shop"
+                className="px-6 sm:px-8 py-3 sm:py-3.5 bg-terracotta hover:bg-[#c26243] text-white text-[11px] sm:text-xs uppercase tracking-[0.22em] font-semibold rounded-full shadow-[0_8px_25px_rgba(217,119,87,0.35)] hover:shadow-terracotta/40 transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                Explore Rituals
+              </Link>
+              <Link
+                href="/bundles"
+                className="px-6 sm:px-8 py-3 sm:py-3.5 bg-white/15 hover:bg-white/25 backdrop-blur-md border border-white/40 text-white text-[11px] sm:text-xs uppercase tracking-[0.22em] font-semibold rounded-full transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                View Bundles
+              </Link>
+            </motion.div>
           </div>
 
         </div>
 
       </div>
 
-      {/* Mobile Social Icons Bar (Horizontal at bottom above dock) */}
-      <div className="md:hidden absolute bottom-16 inset-x-0 z-30 flex items-center justify-center gap-4">
+      {/* Mobile Social Icons Bar (Horizontal above dock) */}
+      <div className="md:hidden absolute bottom-24 inset-x-0 z-30 flex items-center justify-center gap-3">
         {[
           { icon: FaLinkedinIn, href: "#" },
           { icon: FaTwitter, href: "#" },

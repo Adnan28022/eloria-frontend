@@ -67,10 +67,15 @@ export const JournalPreview: React.FC = () => {
               transition={{ duration: 0.6, delay: i * 0.15 }}
               className="group cursor-pointer flex flex-col"
             >
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl mb-6">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl mb-6 bg-[#FAF7F2]">
                 <img
                   src={article.image}
                   alt={article.title}
+                  loading="lazy"
+                  decoding="async"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = "/home2.jfif";
+                  }}
                   className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
                 />
               </div>

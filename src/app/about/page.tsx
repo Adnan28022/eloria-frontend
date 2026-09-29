@@ -52,7 +52,16 @@ export default function AboutPage() {
               transition={{ duration: 0.8, delay: 0.2 }}
               className="relative aspect-square md:aspect-[4/5] overflow-hidden rounded-2xl bg-[#f4efe6]"
             >
-              <img src="/home2.jfif" alt="Botanical Ingredients" className="w-full h-full object-cover" />
+              <img 
+                src="/home2.jfif" 
+                alt="Botanical Ingredients" 
+                loading="lazy"
+                decoding="async"
+                onError={(e) => {
+                  (e.currentTarget as HTMLImageElement).src = "/hero-bg.jfif";
+                }}
+                className="w-full h-full object-cover" 
+              />
             </motion.div>
           </div>
 

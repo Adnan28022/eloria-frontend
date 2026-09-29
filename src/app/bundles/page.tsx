@@ -38,22 +38,30 @@ export default function BundlesPublicPage() {
       <Navbar />
       <main className="min-h-screen bg-ivory pb-24">
         {/* Hero Section */}
-        <section className="relative h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
+        <section className="relative h-[55vh] sm:h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0">
-            <img src="/KitsHero.jfif" alt="Kits and Bundles" className="w-full h-full object-cover" />
-            <div className="absolute inset-0 bg-black/40" />
+            <img 
+              src="/KitsHero.jfif" 
+              alt="Kits and Bundles" 
+              loading="eager"
+              className="w-full h-full object-cover" 
+              onError={(e) => {
+                (e.currentTarget as HTMLImageElement).src = "/hero-bg.jfif";
+              }}
+            />
+            <div className="absolute inset-0 bg-black/45" />
           </div>
           
-          <div className="container mx-auto px-6 relative z-10 text-center mt-16">
-            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 font-bold text-xs uppercase tracking-widest mb-6">
-              <Sparkles className="w-4 h-4 text-terracotta" /> Exclusive Value Sets
+          <div className="container mx-auto px-6 relative z-10 text-center mt-12 sm:mt-16">
+            <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md text-white border border-white/20 font-bold text-[10px] sm:text-xs uppercase tracking-widest mb-4 sm:mb-6">
+              <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-terracotta" /> Exclusive Value Sets
             </motion.div>
             
-            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="text-5xl md:text-7xl font-serif text-white mb-6 leading-tight max-w-4xl mx-auto">
+            <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }} className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif text-white mb-4 sm:mb-6 leading-tight max-w-4xl mx-auto">
               Curated Bundles for <br/><span className="italic text-white/90">Perfect Skin</span>
             </motion.h1>
             
-            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-white/80 text-lg md:text-xl max-w-2xl mx-auto font-medium">
+            <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }} className="text-white/80 text-sm sm:text-lg md:text-xl max-w-2xl mx-auto font-light">
               Save more when you shop our expertly curated skincare routines. Hand-picked products designed to work flawlessly together.
             </motion.p>
           </div>
@@ -85,8 +93,17 @@ export default function BundlesPublicPage() {
                 {/* Image Side */}
                 <div className="w-full lg:w-1/2 relative">
                   <div className="absolute inset-0 bg-terracotta/10 rounded-[2.5rem] translate-x-4 translate-y-4 group-hover:translate-x-6 group-hover:translate-y-6 transition-transform duration-500" />
-                  <div className="relative aspect-square rounded-[2.5rem] overflow-hidden">
-                    <img src={bundle.image} alt={bundle.name} className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" />
+                  <div className="relative aspect-square rounded-[2.5rem] overflow-hidden bg-[#FAF7F2]">
+                    <img 
+                      src={bundle.image} 
+                      alt={bundle.name} 
+                      loading="lazy"
+                      decoding="async"
+                      onError={(e) => {
+                        (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                      }}
+                      className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110" 
+                    />
                     
                     {/* Savings Tag */}
                     {bundle.compareAtPrice && bundle.compareAtPrice > bundle.price && (
@@ -112,7 +129,16 @@ export default function BundlesPublicPage() {
                     <div className="space-y-4">
                       {bundle.products?.map((prod: any) => (
                         <div key={prod._id} className="flex items-center gap-4 bg-white p-3 rounded-2xl shadow-sm border border-charcoal/5">
-                          <img src={prod.image} alt={prod.name} className="w-12 h-12 rounded-xl object-cover" />
+                          <img 
+                            src={prod.image || '/prod-1.png'} 
+                            alt={prod.name} 
+                            loading="lazy"
+                            decoding="async"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                            }}
+                            className="w-12 h-12 rounded-xl object-cover" 
+                          />
                           <div className="flex-1">
                             <h4 className="font-serif text-charcoal font-medium">{prod.name}</h4>
                             <p className="text-[10px] text-charcoal/50 uppercase tracking-widest">Full Size</p>

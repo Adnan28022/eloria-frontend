@@ -31,8 +31,22 @@ export default function ProductDetailPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center font-serif text-2xl text-charcoal bg-ivory">
-        Loading...
+      <div className="min-h-screen flex flex-col bg-ivory text-charcoal">
+        <Navbar />
+        <main className="flex-grow pt-24 md:pt-32 pb-24 px-6 md:px-12 max-w-[1400px] mx-auto w-full animate-pulse">
+          <div className="h-4 bg-[#EDE5DA] w-48 rounded mb-8" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24">
+            <div className="aspect-[4/5] bg-[#EDE5DA] rounded-2xl w-full" />
+            <div className="space-y-6">
+              <div className="h-10 bg-[#EDE5DA] w-3/4 rounded-xl" />
+              <div className="h-4 bg-[#EDE5DA] w-1/3 rounded" />
+              <div className="h-8 bg-[#EDE5DA] w-1/4 rounded" />
+              <div className="h-24 bg-[#EDE5DA] w-full rounded-2xl" />
+              <div className="h-12 bg-[#EDE5DA] w-1/2 rounded-full" />
+            </div>
+          </div>
+        </main>
+        <Footer />
       </div>
     );
   }
@@ -41,8 +55,11 @@ export default function ProductDetailPage() {
     return (
       <div className="min-h-screen flex flex-col bg-ivory text-charcoal">
         <Navbar />
-        <div className="flex-grow flex items-center justify-center font-serif text-2xl text-charcoal">
-          Product not found.
+        <div className="flex-grow flex flex-col items-center justify-center font-serif text-2xl text-charcoal py-24 px-6 text-center">
+          <p className="mb-4">Product not found.</p>
+          <Link href="/shop" className="text-xs uppercase tracking-widest text-terracotta border-b border-terracotta pb-1 font-sans font-bold">
+            Back to Shop
+          </Link>
         </div>
         <Footer />
       </div>
@@ -71,43 +88,55 @@ export default function ProductDetailPage() {
           <ChevronRight className="w-3 h-3" />
           <Link href="/shop" className="hover:text-terracotta transition-colors">Shop</Link>
           <ChevronRight className="w-3 h-3" />
-          <span className="text-charcoal">{product.name}</span>
+          <span className="text-charcoal truncate max-w-[200px]">{product.name}</span>
         </nav>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 lg:gap-24">
           {/* Left: Image Gallery */}
-          <div className="flex flex-col-reverse lg:flex-row gap-6">
+          <div className="flex flex-col-reverse lg:flex-row gap-4 sm:gap-6">
             {/* Thumbnails */}
-            <div className="flex lg:flex-col gap-4 overflow-x-auto lg:overflow-visible pb-4 lg:pb-0 hide-scrollbar shrink-0">
+            <div className="flex lg:flex-col gap-3 sm:gap-4 overflow-x-auto lg:overflow-visible pb-2 lg:pb-0 hide-scrollbar shrink-0">
               {gallery.map((img: string, idx: number) => (
                 <button
                   key={idx}
                   onClick={() => setActiveImage(idx)}
-                  className={`relative w-20 h-24 shrink-0 rounded-lg overflow-hidden transition-all duration-300 ${activeImage === idx ? 'ring-1 ring-charcoal' : 'opacity-60 hover:opacity-100'}`}
+                  className={`relative w-16 sm:w-20 h-20 sm:h-24 shrink-0 rounded-xl overflow-hidden transition-all duration-300 ${activeImage === idx ? 'ring-2 ring-terracotta shadow-md' : 'opacity-60 hover:opacity-100'}`}
                 >
-                  <img src={img} alt={`Thumbnail ${idx}`} className="w-full h-full object-cover" />
+                  <img 
+                    src={img} 
+                    alt={`Thumbnail ${idx}`} 
+                    loading="lazy"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                    }}
+                    className="w-full h-full object-cover" 
+                  />
                 </button>
               ))}
             </div>
 
             {/* Main Image */}
-            <div className="relative aspect-[4/5] bg-[#f4efe6] rounded-2xl overflow-hidden w-full">
+            <div className="relative aspect-[4/5] bg-[#f4efe6] rounded-2xl overflow-hidden w-full shadow-sm">
               <AnimatePresence mode="wait">
                 <motion.img
                   key={activeImage}
-                  src={gallery[activeImage]}
-                  initial={{ opacity: 0, scale: 1.05 }}
+                  src={gallery[activeImage] || "/prod-1.png"}
+                  initial={{ opacity: 0, scale: 1.03 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0 }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
                   alt={product.name}
+                  loading="eager"
+                  onError={(e) => {
+                    (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
+                  }}
                   className="w-full h-full object-cover"
                 />
               </AnimatePresence>
               
               {(product.isBestSeller || product.isNew) && (
-                <div className="absolute top-6 left-6 z-20">
-                  <span className="px-4 py-2 bg-ivory/90 backdrop-blur-md text-charcoal text-[10px] uppercase tracking-[0.25em] font-bold rounded-full shadow-sm">
+                <div className="absolute top-4 sm:top-6 left-4 sm:left-6 z-20 pointer-events-none">
+                  <span className="px-3.5 py-1.5 bg-ivory/90 backdrop-blur-md text-charcoal text-[9px] uppercase tracking-[0.25em] font-bold rounded-full shadow-sm">
                     {product.isBestSeller ? "Bestseller" : "New"}
                   </span>
                 </div>

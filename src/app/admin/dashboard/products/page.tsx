@@ -274,7 +274,14 @@ export default function AdminProductsPage() {
                         <td className="p-4 sm:p-6">
                           <div className="flex items-center gap-4">
                             <div className="w-14 h-14 rounded-xl bg-charcoal/5 overflow-hidden shrink-0 border border-charcoal/10 relative group-hover:shadow-md transition-shadow">
-                              <img src={product.image || '/prod-1.png'} alt={product.name} className="w-full h-full object-cover" />
+                              <img 
+                                src={product.image || '/prod-1.png'} 
+                                alt={product.name} 
+                                onError={(e) => {
+                                  (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                                }}
+                                className="w-full h-full object-cover" 
+                              />
                             </div>
                             <div className="min-w-0">
                               <p className="font-medium text-sm text-charcoal truncate">{product.name}</p>
@@ -314,7 +321,13 @@ export default function AdminProductsPage() {
                 {filtered.map((product) => (
                   <motion.div layout initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.9 }} key={product._id} className="bg-white border border-charcoal/10 rounded-2xl p-4 flex flex-col hover:shadow-xl transition-all duration-300 group">
                     <div className="relative w-full aspect-square rounded-xl overflow-hidden bg-charcoal/5 mb-4">
-                      <img src={product.image || '/prod-1.png'} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img 
+                        src={product.image || '/prod-1.png'} 
+                        onError={(e) => {
+                          (e.currentTarget as HTMLImageElement).src = '/prod-1.png';
+                        }}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                      />
                       <div className="absolute top-2 right-2 flex gap-1">
                         <button onClick={() => setEditModal(product)} className="w-8 h-8 rounded-full bg-white/90 backdrop-blur shadow-sm text-charcoal flex items-center justify-center hover:bg-white hover:scale-110 transition-all"><Edit2 className="w-3.5 h-3.5" /></button>
                         <button onClick={() => setDeleteModal(product)} className="w-8 h-8 rounded-full bg-white/90 backdrop-blur shadow-sm text-red-500 flex items-center justify-center hover:bg-red-50 hover:scale-110 transition-all"><Trash2 className="w-3.5 h-3.5" /></button>
