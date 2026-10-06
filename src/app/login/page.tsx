@@ -39,7 +39,7 @@ export default function LoginPage() {
       {/* Left side: Image */}
       <div className="hidden md:flex w-1/2 relative bg-charcoal">
         <img 
-          src="/home1.jfif" 
+          src="/login-bg.jfif" 
           alt="Eloria Skincare" 
           className="w-full h-full object-cover opacity-80"
           onError={(e) => {

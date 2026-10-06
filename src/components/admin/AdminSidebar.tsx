@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import toast from "react-hot-toast";
 import { 
   LayoutDashboard, 
   Package, 
@@ -19,7 +20,9 @@ import {
   Zap,
   Gift,
   Sparkles,
-  X
+  X,
+  ExternalLink,
+  LogOut
 } from "lucide-react";
 
 interface AdminSidebarProps {
@@ -32,6 +35,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
   const [activeOrders, setActiveOrders] = useState(0);
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   React.useEffect(() => {
     setMounted(true);
@@ -41,6 +45,12 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
         .catch(() => {});
     });
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("eloria_admin_token");
+    toast.success("Logged out successfully");
+    router.push("/admin/login");
+  };
 
   const navItems = [
     { label: "Overview", href: "/admin/dashboard", icon: LayoutDashboard },
@@ -71,28 +81,26 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
       </div>
 
       {/* Header / Brand Logo */}
-      <div className="h-20 flex items-center justify-between px-4 border-b border-white/[0.06] relative z-10 shrink-0">
-        <div className={`flex items-center w-full transition-all duration-300 ${isCollapsed ? "justify-center" : "justify-between"}`}>
-          {!isCollapsed ? (
-            <div className="flex items-center gap-3 py-1.5 px-3 rounded-xl bg-white/[0.03] border border-white/[0.08] flex-1 mr-2 shadow-inner">
-              <img src="/logo-bg.png" alt="Eloria" className="h-8 w-auto object-contain" />
-            </div>
-          ) : (
-            <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center p-1">
-              <img src="/logo-bg.png" alt="Eloria" className="w-full h-full object-contain" />
-            </div>
-          )}
-
-          {/* Mobile Close Button */}
-          {isMobileOpen && (
-            <button 
-              onClick={() => setMobileOpen(false)}
-              className="md:hidden p-1.5 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          )}
-        </div>
+      <div className="h-28 flex items-center justify-center border-b border-white/[0.06] relative z-10 shrink-0 w-full py-4">
+        {!isCollapsed ? (
+          <div className="flex items-center justify-center w-full px-4">
+            <img src="/logo-bg.png" alt="Eloria" className="h-16 w-auto object-contain mx-auto transition-all" />
+          </div>
+        ) : (
+          <div className="flex items-center justify-center w-full">
+            <img src="/logo-bg.png" alt="Eloria" className="h-8 w-auto object-contain mx-auto transition-all" />
+          </div>
+        )}
+        
+        {/* Mobile Close Button */}
+        {isMobileOpen && (
+          <button 
+            onClick={() => setMobileOpen(false)}
+            className="md:hidden absolute right-4 top-1/2 -translate-y-1/2 p-2 rounded-lg text-zinc-400 hover:text-white hover:bg-white/10 transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        )}
       </div>
 
       {/* Navigation Menu */}
@@ -121,7 +129,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
                 />
               )}
               
-              <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative z-10 ${
+              <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative z-10 min-h-[44px] ${
                 isActive 
                   ? "text-white font-medium" 
                   : "text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04]"
@@ -142,7 +150,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
           );
         })}
 
-        <div className="mt-4 pt-3 border-t border-white/[0.06]">
+        <div className="mt-4 pt-3 border-t border-white/[0.06] flex flex-col gap-1">
           {!isCollapsed && (
             <div className="text-[10px] uppercase tracking-widest text-zinc-500 mb-1 px-3 font-semibold">
               System
@@ -161,7 +169,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
                 transition={{ type: "spring", stiffness: 500, damping: 35 }}
               />
             )}
-            <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative z-10 ${
+            <div className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative z-10 min-h-[44px] ${
               pathname === "/admin/dashboard/settings"
                 ? "text-white font-medium" 
                 : "text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04]"
@@ -170,28 +178,36 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({ isMobileOpen, setMob
               {!isCollapsed && <span className="text-xs tracking-wide flex-grow">Settings</span>}
             </div>
           </Link>
+
+          {/* Visit Website */}
+          <a
+            href="https://eloria-frontend.vercel.app"
+            target="_blank"
+            rel="noopener noreferrer"
+            className={`flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative z-10 text-zinc-400 hover:text-zinc-100 hover:bg-white/[0.04] min-h-[44px] group block ${isCollapsed ? "justify-center" : "justify-start"}`}
+          >
+            <ExternalLink className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-105 text-zinc-500 group-hover:text-[#D97757]" />
+            {!isCollapsed && <span className="text-xs tracking-wide flex-grow">Visit Website</span>}
+          </a>
+          
+          {/* Logout */}
+          <button
+            onClick={handleLogout}
+            className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 relative z-10 text-zinc-400 hover:text-red-400 hover:bg-red-400/10 min-h-[44px] group ${isCollapsed ? "justify-center" : "justify-start"}`}
+          >
+            <LogOut className="w-4 h-4 shrink-0 transition-transform duration-200 group-hover:scale-105 text-zinc-500 group-hover:text-red-400" />
+            {!isCollapsed && <span className="text-xs tracking-wide flex-grow text-left">Logout</span>}
+          </button>
         </div>
       </div>
 
-      {/* User Profile Footer & Collapse Action */}
+      {/* Collapse Action */}
       <div className="p-3 border-t border-white/[0.06] shrink-0 relative z-10 bg-[#0d0b0a]">
-        {!isCollapsed && (
-          <div className="flex items-center gap-2.5 px-2.5 py-2 mb-2 rounded-xl bg-white/[0.02] border border-white/[0.05]">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-[#D97757] to-[#9E472A] text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
-              E
-            </div>
-            <div className="flex flex-col overflow-hidden min-w-0">
-              <span className="text-xs font-medium text-zinc-200 truncate">Eloria Studio</span>
-              <span className="text-[10px] text-zinc-500 truncate">admin@eloria.com</span>
-            </div>
-          </div>
-        )}
-        
         <button 
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className={`w-full flex items-center p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] transition-all text-zinc-400 hover:text-white border border-white/[0.04] ${isCollapsed ? "justify-center" : "justify-between"}`}
+          className={`w-full flex items-center p-2 rounded-xl bg-white/[0.02] hover:bg-white/[0.06] transition-all text-zinc-400 hover:text-white border border-white/[0.04] min-h-[44px] ${isCollapsed ? "justify-center" : "justify-between"}`}
         >
-          {!isCollapsed && <span className="text-[10px] uppercase tracking-wider font-semibold">Collapse</span>}
+          {!isCollapsed && <span className="text-[10px] uppercase tracking-wider font-semibold ml-1">Collapse Sidebar</span>}
           <ChevronLeft className={`w-4 h-4 transition-transform duration-300 ${isCollapsed ? "rotate-180" : ""}`} />
         </button>
       </div>
