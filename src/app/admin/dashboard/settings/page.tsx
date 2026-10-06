@@ -59,6 +59,22 @@ export default function SettingsPage() {
                     className="w-full bg-[#fcfbf9] border border-charcoal/10 rounded-xl py-3 px-4 outline-none focus:border-terracotta transition-colors text-sm"
                   />
                 </div>
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-widest text-charcoal/60 font-medium">Phone Number</label>
+                  <input 
+                    type="tel" 
+                    defaultValue="+92 300 1234567"
+                    className="w-full bg-[#fcfbf9] border border-charcoal/10 rounded-xl py-3 px-4 outline-none focus:border-terracotta transition-colors text-sm"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-xs uppercase tracking-widest text-charcoal/60 font-medium">Store Address</label>
+                  <input 
+                    type="text" 
+                    defaultValue="123 Skincare Lane, Beauty City"
+                    className="w-full bg-[#fcfbf9] border border-charcoal/10 rounded-xl py-3 px-4 outline-none focus:border-terracotta transition-colors text-sm"
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">

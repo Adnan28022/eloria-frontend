@@ -376,9 +376,9 @@ export default function AdminProductsPage() {
         {/* Add / Edit Modals */}
         {(addModal || editModal) && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-charcoal/80 backdrop-blur-sm px-4 sm:px-6 py-6 sm:py-12">
-            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} className="bg-white rounded-3xl w-full max-w-5xl shadow-[0_20px_60px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col max-h-full">
+            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }} className="bg-white rounded-3xl w-full max-w-5xl shadow-[0_20px_60px_rgba(0,0,0,0.2)] overflow-hidden flex flex-col max-h-[90vh] sm:max-h-full">
               
-              <div className="px-8 py-6 border-b border-charcoal/10 flex justify-between items-center bg-[#fcfbf9]">
+              <div className="px-6 sm:px-8 py-5 sm:py-6 border-b border-charcoal/10 flex justify-between items-center bg-[#fcfbf9] shrink-0">
                 <div>
                   <h3 className="font-serif text-2xl text-charcoal">{addModal ? 'Create New Product' : 'Edit Product'}</h3>
                   <p className="text-xs text-charcoal/50 mt-1">{addModal ? 'Add a new item to your catalog' : `Updating ${editModal?.name}`}</p>
@@ -386,8 +386,8 @@ export default function AdminProductsPage() {
                 <button onClick={() => { setAddModal(false); setEditModal(null); setAddFiles([]); setEditFiles([]); }} className="w-10 h-10 rounded-full bg-white border border-charcoal/10 flex items-center justify-center text-charcoal/40 hover:text-terracotta hover:border-terracotta hover:shadow-sm transition-all"><X className="w-5 h-5" /></button>
               </div>
 
-              <div className="p-8 overflow-y-auto bg-white">
-                <form id="product-form" onSubmit={addModal ? handleAdd : handleEdit} className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+              <div className="p-4 sm:p-8 overflow-y-auto bg-white flex-1">
+                <form id="product-form" onSubmit={addModal ? handleAdd : handleEdit} className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-10">
                   
                   {/* Left Col: Primary Details */}
                   <div className="lg:col-span-7 space-y-6">

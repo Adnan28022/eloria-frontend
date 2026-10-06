@@ -59,7 +59,6 @@ export function EssentialSteps() {
 
   return (
     <section ref={ref} className="bg-[#fcfbfa] relative h-[540vh]">
-      {/* Introduction Title (Fixed at start or part of flow) - I will just integrate it smoothly */}
       <div className="sticky top-0 flex h-screen items-center justify-center overflow-hidden">
         
         {/* Texts */}
@@ -70,26 +69,26 @@ export function EssentialSteps() {
             return (
               <article
                 key={s.title}
-                className={`absolute top-1/2 w-[44%] max-w-md -translate-y-1/2 px-6 lg:px-16 ${
-                  onRight ? "right-0" : "left-0"
+                className={`absolute top-1/2 w-full sm:w-[80%] md:w-[60%] lg:w-[44%] max-w-md -translate-y-1/2 px-6 lg:px-16 ${
+                  onRight ? "md:right-0 md:left-auto left-0" : "left-0 md:right-auto right-0"
                 }`}
                 style={{
                   opacity,
                   transform: `translate3d(0, calc(-50% + ${mapRange(opacity, 0, 1, 38, 0)}px), 0)`,
                 }}
               >
-                <div className="flex items-start gap-6">
-                  <span className="text-[110px] lg:text-[150px] leading-[0.75] text-[#d49b91] font-light tracking-tighter select-none">
+                <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 bg-white/70 md:bg-transparent backdrop-blur-sm md:backdrop-blur-none p-6 md:p-0 rounded-2xl md:rounded-none shadow-sm md:shadow-none pointer-events-auto">
+                  <span className="text-6xl md:text-[110px] lg:text-[150px] leading-none md:leading-[0.75] text-[#d49b91] font-light tracking-tighter select-none">
                     {s.n}
                   </span>
-                  <div className="pt-2">
-                    <h3 className="text-3xl lg:text-[38px] tracking-[0.05em] text-[#2b2b2b] font-normal mb-2 uppercase">
+                  <div className="pt-1 md:pt-2">
+                    <h3 className="text-2xl sm:text-3xl lg:text-[38px] tracking-[0.05em] text-[#2b2b2b] font-normal mb-1 md:mb-2 uppercase">
                       {s.title}
                     </h3>
-                    <p className="text-[11px] lg:text-xs tracking-[0.2em] text-[#888] font-semibold mb-3 uppercase">
+                    <p className="text-[10px] md:text-[11px] lg:text-xs tracking-[0.2em] text-[#888] font-semibold mb-2 md:mb-3 uppercase">
                       {s.sub}
                     </p>
-                    <p className="text-[#666] text-sm lg:text-base max-w-xl font-light leading-relaxed">
+                    <p className="text-[#666] text-xs sm:text-sm lg:text-base max-w-xl font-light leading-relaxed">
                       {s.body}
                     </p>
                   </div>
@@ -101,7 +100,7 @@ export function EssentialSteps() {
 
         {/* Bubbles and Products */}
         <div
-          className="relative flex aspect-square w-[76vw] max-w-[560px] items-center justify-center will-change-transform md:w-[46vw]"
+          className="relative flex aspect-square w-[90vw] max-w-[560px] items-center justify-center will-change-transform md:w-[46vw] pointer-events-none"
           style={{
             transform: `translate3d(${bubbleX}vw, ${bubbleY}vh, 0) scale(${bubbleScale})`,
           }}
@@ -113,6 +112,7 @@ export function EssentialSteps() {
             width={1024}
             height={1024}
             loading="lazy"
+            decoding="async"
             className="absolute inset-0 h-full w-full opacity-80"
           />
 
@@ -132,10 +132,10 @@ export function EssentialSteps() {
                   width={600}
                   height={800}
                   loading="lazy"
+                  decoding="async"
                   className={`object-contain drop-shadow-[0_10px_10px_rgba(0,0,0,0.2)] ${s.customClass || "max-w-[120px] lg:max-w-[150px]"}`}
                 />
 
-                {/* Left Bubble: Add to Cart */}
                 <Link
                   href="/shop"
                   className="absolute flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-white hover:bg-white transition-all text-[#2b2b2b] hover:scale-110 z-10"
@@ -147,7 +147,6 @@ export function EssentialSteps() {
                   <ShoppingBag size={18} />
                 </Link>
 
-                {/* Right Bubble: View */}
                 <Link
                   href="/shop"
                   className="absolute flex items-center justify-center w-10 h-10 lg:w-12 lg:h-12 bg-white/90 backdrop-blur-md rounded-full shadow-lg border border-white hover:bg-white transition-all text-[#2b2b2b] hover:scale-110 z-10"
@@ -162,14 +161,15 @@ export function EssentialSteps() {
             );
           })}
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center" style={{ opacity: finalOpacity }}>
-            <div className="relative w-[64%] flex flex-col items-center">
+          <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-auto" style={{ opacity: finalOpacity }}>
+            <div className="relative w-[80%] md:w-[64%] flex flex-col items-center">
               <img 
                 src="/all.png" 
                 alt="Eloria Skincare Set" 
                 width={1200} 
                 height={1008} 
                 loading="lazy" 
+                decoding="async"
                 onError={(e) => {
                   (e.currentTarget as HTMLImageElement).src = "/prod-1.png";
                 }}
@@ -177,7 +177,7 @@ export function EssentialSteps() {
               />
               <Link
                 href="/bundles"
-                className="absolute -bottom-6 border border-charcoal/40 text-charcoal bg-white/80 backdrop-blur-sm hover:bg-charcoal hover:text-white px-8 py-3 text-xs tracking-[0.25em] uppercase transition-colors rounded-full shadow-md"
+                className="absolute -bottom-6 border border-charcoal/40 text-charcoal bg-white/80 backdrop-blur-sm hover:bg-charcoal hover:text-white px-6 md:px-8 py-2 md:py-3 text-[10px] md:text-xs tracking-[0.25em] uppercase transition-colors rounded-full shadow-md whitespace-nowrap"
               >
                 Shop The Set
               </Link>

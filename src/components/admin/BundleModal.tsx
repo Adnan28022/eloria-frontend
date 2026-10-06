@@ -221,7 +221,7 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
         </div>
 
         <form onSubmit={handleSubmit} className="flex flex-col flex-1 overflow-hidden">
-          <div className="flex flex-col md:flex-row flex-1 overflow-hidden">
+          <div className="flex flex-col md:flex-row flex-1 overflow-y-auto md:overflow-hidden">
 
             <AnimatePresence mode="wait">
               {activeTab === "form" ? (
@@ -230,7 +230,7 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="flex-1 overflow-y-auto p-6 sm:p-8 space-y-5 hide-scrollbar"
+                  className="flex-1 md:overflow-y-auto p-4 sm:p-8 space-y-5 hide-scrollbar shrink-0"
                 >
                   {/* Name + Status */}
                   <div className="flex gap-4">
@@ -434,8 +434,8 @@ export default function BundleModal({ bundle, onClose, onSuccess }: BundleModalP
             </AnimatePresence>
 
             {/* Right Column: Product Selection */}
-            <div className="w-full md:w-[360px] bg-[#fcfbf9] border-l border-charcoal/5 flex flex-col shrink-0">
-              <div className="p-5 border-b border-charcoal/5 flex items-center justify-between shrink-0">
+            <div className="w-full md:w-[360px] bg-[#fcfbf9] border-t md:border-t-0 md:border-l border-charcoal/5 flex flex-col shrink-0 md:h-full min-h-[400px]">
+              <div className="p-4 sm:p-5 border-b border-charcoal/5 flex items-center justify-between shrink-0">
                 <div>
                   <h3 className="font-serif text-lg text-charcoal flex items-center gap-2">
                     <LayoutList className="w-4 h-4 text-terracotta" /> Include Products

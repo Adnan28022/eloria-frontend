@@ -9,28 +9,28 @@ export default function InvoiceModal({ order, onClose }: { order: any, onClose: 
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-charcoal/60 backdrop-blur-sm px-6 py-12">
+    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-charcoal/60 backdrop-blur-sm px-4 sm:px-6 py-6 sm:py-12">
       <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} className="bg-[#fcfbf9] rounded-2xl w-full max-w-3xl shadow-2xl overflow-hidden flex flex-col max-h-full print:bg-white print:max-w-none print:shadow-none print:w-full print:h-full print:fixed print:inset-0 print:z-[300]">
         
         {/* Header - Hidden on print */}
-        <div className="p-6 border-b border-charcoal/10 flex justify-between items-center bg-white print:hidden">
-          <h3 className="font-serif text-2xl">Order Invoice</h3>
-          <div className="flex gap-4">
-            <button onClick={handlePrint} className="flex items-center gap-2 px-4 py-2 bg-charcoal text-white rounded-lg text-xs uppercase tracking-widest font-medium hover:bg-terracotta transition-colors">
-              <Printer className="w-4 h-4" /> Print Receipt
+        <div className="p-4 sm:p-6 border-b border-charcoal/10 flex justify-between items-center bg-white print:hidden shrink-0">
+          <h3 className="font-serif text-xl sm:text-2xl">Order Invoice</h3>
+          <div className="flex gap-2 sm:gap-4">
+            <button onClick={handlePrint} className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-charcoal text-white rounded-lg text-[10px] sm:text-xs uppercase tracking-widest font-medium hover:bg-terracotta transition-colors">
+              <Printer className="w-4 h-4" /> <span className="hidden sm:inline">Print Receipt</span>
             </button>
-            <button onClick={onClose} className="text-charcoal/40 hover:text-terracotta"><X className="w-6 h-6" /></button>
+            <button onClick={onClose} className="p-2 text-charcoal/40 hover:text-terracotta bg-charcoal/5 hover:bg-charcoal/10 rounded-lg"><X className="w-5 h-5" /></button>
           </div>
         </div>
 
         {/* Invoice Content */}
-        <div className="p-8 md:p-12 overflow-y-auto" id="invoice-content">
-          <div className="flex justify-between items-start border-b border-charcoal/10 pb-8 mb-8">
+        <div className="p-6 sm:p-8 md:p-12 overflow-y-auto" id="invoice-content">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-start border-b border-charcoal/10 pb-6 mb-6 md:pb-8 md:mb-8 gap-6">
             <div>
               <img src="/eloria-logo.png" alt="Eloria Skincare" className="h-10 md:h-14 mb-4 object-contain" />
               <p className="text-sm text-charcoal/60 font-light">Eloria Skincare<br/>Lahore, Pakistan</p>
             </div>
-            <div className="text-right">
+            <div className="md:text-right">
               <h2 className="font-serif text-2xl mb-2 text-terracotta">INVOICE</h2>
               <p className="text-sm text-charcoal/60"><strong>Order #:</strong> {order.orderId}</p>
               <p className="text-sm text-charcoal/60"><strong>Date:</strong> {new Date(order.createdAt).toLocaleDateString('en-PK', { year: 'numeric', month: 'long', day: 'numeric' })}</p>
@@ -38,14 +38,14 @@ export default function InvoiceModal({ order, onClose }: { order: any, onClose: 
             </div>
           </div>
 
-          <div className="flex justify-between border-b border-charcoal/10 pb-8 mb-8">
+          <div className="flex flex-col sm:flex-row justify-between border-b border-charcoal/10 pb-6 mb-6 md:pb-8 md:mb-8 gap-6">
             <div>
               <h3 className="text-xs uppercase tracking-widest text-charcoal/40 font-bold mb-2">Bill To</h3>
               <p className="text-sm font-medium">{order.customer?.name}</p>
               <p className="text-sm text-charcoal/60">{order.customer?.email}</p>
               <p className="text-sm text-charcoal/60">{order.customer?.phone}</p>
             </div>
-            <div className="text-right">
+            <div className="sm:text-right">
               <h3 className="text-xs uppercase tracking-widest text-charcoal/40 font-bold mb-2">Ship To</h3>
               <p className="text-sm text-charcoal/60">{order.shippingAddress?.street}</p>
               <p className="text-sm text-charcoal/60">{order.shippingAddress?.city}, {order.shippingAddress?.zip}</p>
@@ -53,31 +53,33 @@ export default function InvoiceModal({ order, onClose }: { order: any, onClose: 
             </div>
           </div>
 
-          <table className="w-full text-left border-collapse mb-8">
-            <thead>
-              <tr className="border-b border-charcoal/20 text-xs uppercase tracking-widest text-charcoal/40">
-                <th className="py-3 font-bold">Item Description</th>
-                <th className="py-3 font-bold text-center">Qty</th>
-                <th className="py-3 font-bold text-right">Price</th>
-                <th className="py-3 font-bold text-right">Total</th>
-              </tr>
-            </thead>
-            <tbody>
-              {order.items?.map((item: any, i: number) => (
-                <tr key={i} className="border-b border-charcoal/10">
-                  <td className="py-4">
-                    <p className="font-medium text-sm">{item.productName}</p>
-                  </td>
-                  <td className="py-4 text-center text-sm text-charcoal/70">{item.quantity}</td>
-                  <td className="py-4 text-right text-sm text-charcoal/70">{formatPKR(item.price)}</td>
-                  <td className="py-4 text-right font-medium text-sm">{formatPKR(item.price * item.quantity)}</td>
+          <div className="overflow-x-auto mb-6 md:mb-8 pb-4">
+            <table className="w-full text-left border-collapse min-w-[500px]">
+              <thead>
+                <tr className="border-b border-charcoal/20 text-[10px] sm:text-xs uppercase tracking-widest text-charcoal/40">
+                  <th className="py-3 font-bold">Item Description</th>
+                  <th className="py-3 font-bold text-center">Qty</th>
+                  <th className="py-3 font-bold text-right">Price</th>
+                  <th className="py-3 font-bold text-right">Total</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {order.items?.map((item: any, i: number) => (
+                  <tr key={i} className="border-b border-charcoal/10">
+                    <td className="py-4">
+                      <p className="font-medium text-sm">{item.productName}</p>
+                    </td>
+                    <td className="py-4 text-center text-sm text-charcoal/70">{item.quantity}</td>
+                    <td className="py-4 text-right text-sm text-charcoal/70">{formatPKR(item.price)}</td>
+                    <td className="py-4 text-right font-medium text-sm">{formatPKR(item.price * item.quantity)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          <div className="flex justify-end border-t-2 border-charcoal/20 pt-6 mt-6">
-            <div className="w-64 space-y-3">
+          <div className="flex justify-end border-t-2 border-charcoal/20 pt-6 mt-2">
+            <div className="w-full sm:w-64 space-y-3">
               <div className="flex justify-between text-sm text-charcoal/70">
                 <span>Subtotal</span>
                 <span>{formatPKR(order.subtotal)}</span>

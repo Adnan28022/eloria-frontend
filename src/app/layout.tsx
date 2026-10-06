@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -16,20 +16,39 @@ export const metadata: Metadata = {
   description: "Scientifically formulated botanical skincare.",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased`}>
+    <html lang="en" className="scroll-smooth">
+      <body className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-ivory text-charcoal selection:bg-peach/30`}>
         <CartProvider>
           <WishlistProvider>
             {children}
             <WishlistDrawer />
             <CartDrawer />
-            <Toaster position="top-right" />
+            <Toaster 
+              position="top-right" 
+              toastOptions={{ 
+                duration: 4000,
+                style: {
+                  background: '#3A322C',
+                  color: '#FBF3EC',
+                  fontSize: '12px',
+                  borderRadius: '8px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.1em'
+                }
+              }} 
+            />
           </WishlistProvider>
         </CartProvider>
       </body>

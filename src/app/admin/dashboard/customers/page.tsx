@@ -81,7 +81,7 @@ export default function AdminCustomersPage() {
           {loading ? (
             <div className="p-8 space-y-4">{[...Array(4)].map((_, i) => <div key={i} className="h-12 bg-charcoal/5 rounded-lg animate-pulse" />)}</div>
           ) : (
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[700px]">
               <thead>
                 <tr className="bg-[#fcfbf9] text-[10px] uppercase tracking-widest text-charcoal/50 border-b border-charcoal/10">
                   <th className="p-4 font-medium">Name</th>
@@ -105,7 +105,7 @@ export default function AdminCustomersPage() {
                     <td className="p-4 text-sm font-medium">{customer.ordersCount}</td>
                     <td className="p-4 font-serif text-base">{formatPKR(customer.totalSpent)}</td>
                     <td className="p-4">
-                      <span className={`px-3 py-1 rounded-full text-xs font-medium border ${customer.status === 'Active' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-charcoal/5 text-charcoal/60 border-charcoal/10'}`}>
+                      <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${customer.status === 'Active' ? 'bg-green-50 text-green-600 border-green-100' : 'bg-charcoal/5 text-charcoal/60 border-charcoal/10'}`}>
                         {customer.status}
                       </span>
                     </td>

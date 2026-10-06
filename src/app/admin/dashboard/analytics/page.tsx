@@ -142,7 +142,7 @@ export default function AnalyticsPage() {
 
   if (loading) return (
     <div className="space-y-8 max-w-[1600px] mx-auto">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(4)].map((_, i) => <div key={i} className="bg-white/80 p-6 rounded-3xl h-36 animate-pulse border border-[#EDE4D8]" />)}
       </div>
     </div>
@@ -171,7 +171,7 @@ export default function AnalyticsPage() {
       </motion.div>
 
       {/* Top Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard label="Total Revenue" rawValue={data?.totalRevenue || 0} trend={data?.revenueGrowth || 0} icon={DollarSign} isCurrency />
         <StatCard label="Total Orders" rawValue={data?.totalOrders || 0} trend={data?.ordersGrowth || 0} icon={ShoppingBag} />
         <StatCard label="Average Order Value" rawValue={data?.averageOrderValue || 0} trend={5.2} icon={Users} isCurrency />

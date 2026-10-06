@@ -40,7 +40,7 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-ivory text-charcoal">
+    <div className="min-h-screen flex flex-col bg-ivory text-charcoal pb-20 xl:pb-0">
       <Navbar />
 
       <main className="flex-grow">

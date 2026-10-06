@@ -354,7 +354,7 @@ export default function POSPage() {
             {/* Customer Details */}
             <div className="bg-white p-4 rounded-2xl border border-charcoal/5 shadow-sm space-y-3">
               <h4 className="text-[10px] uppercase tracking-widest font-bold text-charcoal/50 mb-1 flex items-center gap-1.5"><User className="w-3 h-3" /> Customer Details</h4>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <input type="text" placeholder="Name (Optional)" value={customer.name} onChange={e => setCustomer({...customer, name: e.target.value})} className="w-full bg-[#fcfbf9] border border-charcoal/10 rounded-lg py-2 px-3 text-xs outline-none focus:border-terracotta" />
                 <input type="text" placeholder="Phone (Optional)" value={customer.phone} onChange={e => setCustomer({...customer, phone: e.target.value})} className="w-full bg-[#fcfbf9] border border-charcoal/10 rounded-lg py-2 px-3 text-xs outline-none focus:border-terracotta" />
               </div>
@@ -362,7 +362,7 @@ export default function POSPage() {
 
             {/* Order Configuration */}
             <div className="bg-white p-4 rounded-2xl border border-charcoal/5 shadow-sm space-y-4">
-              <div className="grid grid-cols-2 gap-3 items-end">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 items-end">
                 <div>
                   <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/50 mb-1.5 block">Shipping Type</label>
                   <select value={shippingRate} onChange={e => setShippingRate(Number(e.target.value))} className="w-full bg-[#fcfbf9] border border-charcoal/10 rounded-lg py-2 px-3 text-xs outline-none focus:border-terracotta cursor-pointer font-medium text-charcoal">

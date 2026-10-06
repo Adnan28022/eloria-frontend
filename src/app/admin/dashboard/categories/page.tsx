@@ -86,7 +86,7 @@ export default function AdminCategoriesPage() {
           {loading ? (
             <div className="p-8 text-center text-charcoal/40 text-sm">Loading categories...</div>
           ) : (
-            <table className="w-full text-left border-collapse whitespace-nowrap">
+            <table className="w-full text-left border-collapse min-w-[500px]">
               <thead>
                 <tr className="bg-[#fcfbf9] text-[10px] uppercase tracking-widest text-charcoal/50 border-b border-charcoal/10">
                   <th className="p-4 font-medium">Category Name</th>
@@ -102,7 +102,7 @@ export default function AdminCategoriesPage() {
                   <tr key={cat._id} className="border-b border-charcoal/5 hover:bg-charcoal/[0.02] transition-colors group">
                     <td className="p-4 font-medium text-sm">{cat.name}</td>
                     <td className="p-4 text-sm text-charcoal/70">{cat.slug}</td>
-                    <td className="p-4 text-sm text-charcoal/70">{cat.description || '-'}</td>
+                    <td className="p-4 text-sm text-charcoal/70 whitespace-normal min-w-[200px]">{cat.description || '-'}</td>
                     <td className="p-4 text-right">
                       <div className="flex items-center justify-end gap-2 transition-opacity">
                         <button onClick={() => setEditModal(cat)} className="p-2 text-charcoal/60 hover:text-charcoal hover:bg-charcoal/5 rounded-lg transition-colors">

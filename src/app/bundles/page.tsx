@@ -36,7 +36,7 @@ export default function BundlesPublicPage() {
   return (
     <>
       <Navbar />
-      <main className="min-h-screen bg-ivory pb-24">
+      <main className="min-h-screen bg-ivory pb-24 xl:pb-0">
         {/* Hero Section */}
         <section className="relative h-[55vh] sm:h-[60vh] md:h-[70vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0">

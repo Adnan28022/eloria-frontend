@@ -146,7 +146,7 @@ export default function AdminDashboard() {
 
   if (loading) return (
     <div className="space-y-8">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         {[...Array(4)].map((_, i) => (
           <div key={i} className="bg-white/70 p-6 rounded-3xl h-36 animate-pulse border border-charcoal/5" />
         ))}
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
       </motion.div>
 
       {/* Primary Stats Grid */}
-      <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <motion.div variants={itemVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard label="Total Revenue" rawValue={stats?.totalRevenue || 0} trend={stats?.revenueGrowth || 0} icon={DollarSign} isCurrency />
         <StatCard label="Active Orders" rawValue={stats?.activeOrders || 0} trend={stats?.ordersGrowth || 0} icon={ShoppingBag} />
         <StatCard label="Total Customers" rawValue={stats?.totalCustomers || 0} trend={12.5} icon={Users} />

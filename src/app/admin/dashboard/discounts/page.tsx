@@ -70,7 +70,7 @@ export default function DiscountsPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto w-full">
           {loading ? (
             <div className="p-8 space-y-4">{[...Array(4)].map((_, i) => <div key={i} className="h-12 bg-charcoal/5 rounded-lg animate-pulse" />)}</div>
           ) : (
@@ -125,7 +125,7 @@ export default function DiscountsPage() {
       <AnimatePresence>
         {addModal && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="fixed inset-0 z-[200] flex items-center justify-center bg-charcoal/60 backdrop-blur-sm px-6 py-12">
-            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col">
+            <motion.div initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, opacity: 0 }} className="bg-white rounded-2xl w-full max-w-sm shadow-2xl overflow-hidden flex flex-col max-h-[90vh] overflow-y-auto">
               <div className="p-6 border-b border-charcoal/10 flex justify-between items-center bg-[#fcfbf9]">
                 <h3 className="font-serif text-2xl">Create Discount</h3>
                 <button onClick={() => setAddModal(false)} className="text-charcoal/40 hover:text-terracotta"><X className="w-6 h-6" /></button>

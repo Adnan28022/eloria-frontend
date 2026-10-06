@@ -39,7 +39,7 @@ export const JournalPreview: React.FC = () => {
   return (
     <section className="bg-ivory py-24 md:py-32 border-t border-charcoal/10">
       <div className="max-w-[1400px] mx-auto px-6 md:px-12">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 md:mb-16 gap-6 md:gap-8">
           <div className="space-y-4">
             <h2 className="font-serif text-4xl md:text-5xl text-charcoal tracking-tight">
               The Botanical <span className="italic text-terracotta">Journal</span>
@@ -67,7 +67,7 @@ export const JournalPreview: React.FC = () => {
               transition={{ duration: 0.6, delay: i * 0.15 }}
               className="group cursor-pointer flex flex-col"
             >
-              <div className="relative aspect-[4/3] overflow-hidden rounded-2xl mb-6 bg-[#FAF7F2]">
+              <div className="relative aspect-[4/3] md:aspect-auto md:h-64 lg:h-72 overflow-hidden rounded-2xl mb-6 bg-[#FAF7F2]">
                 <img
                   src={article.image}
                   alt={article.title}
@@ -88,7 +88,7 @@ export const JournalPreview: React.FC = () => {
                 <h3 className="font-serif text-xl md:text-2xl text-charcoal font-medium leading-tight group-hover:text-terracotta transition-colors">
                   {article.title}
                 </h3>
-                <p className="text-charcoal/70 text-sm font-light leading-relaxed">
+                <p className="text-charcoal/70 text-sm font-light leading-relaxed line-clamp-3">
                   {article.excerpt}
                 </p>
               </div>

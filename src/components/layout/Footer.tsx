@@ -1,12 +1,33 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { FaInstagram, FaFacebookF, FaTwitter, FaPinterestP } from "react-icons/fa";
+import { publicApi } from "@/lib/api";
+import { toast } from "react-hot-toast";
 
 export const Footer: React.FC = () => {
+  const [email, setEmail] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubscribe = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+
+    setIsSubmitting(true);
+    try {
+      await publicApi.subscribeNewsletter(email);
+      toast.success("Welcome to the Inner Circle");
+      setEmail("");
+    } catch (err: any) {
+      toast.error(err.response?.data?.message || "Failed to subscribe. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
   return (
     <footer className="bg-ivory text-charcoal relative overflow-hidden border-t border-borderSubtle">
       {/* Enhanced Fluid Animated Background Glow / Mesh Elements */}
@@ -46,7 +67,7 @@ export const Footer: React.FC = () => {
         {/* Main Footer Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8 pb-16 border-b border-charcoal/10">
           
-          {/* Brand Logo & Info (Span 4) - Strictly Centered Logo Alignment */}
+          {/* Brand Logo & Info (Span 4) */}
           <div className="lg:col-span-4 flex flex-col items-center text-center space-y-6">
             <Link href="/" className="inline-block group">
               <motion.img
@@ -55,6 +76,7 @@ export const Footer: React.FC = () => {
                 src="/eloria-logo.png"
                 alt="Eloria Skincare"
                 className="h-24 md:h-28 w-auto object-contain mx-auto"
+                loading="lazy"
               />
             </Link>
             <p className="text-charcoal/70 text-sm font-light leading-relaxed max-w-sm mx-auto">
@@ -155,10 +177,13 @@ export const Footer: React.FC = () => {
                 Subscribe to receive private botanical insights, seasonal rituals, and early access to limited releases.
               </p>
               
-              <form onSubmit={(e) => e.preventDefault()} className="space-y-3 pt-2">
+              <form onSubmit={handleSubscribe} className="space-y-3 pt-2">
                 <div className="relative group/input">
                   <input
                     type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                     placeholder="Enter your email address"
                     className="w-full bg-ivory border border-charcoal/20 py-3.5 pl-4 pr-12 text-sm text-charcoal placeholder:text-charcoal/40 focus:outline-none focus:border-terracotta rounded-xl transition-all duration-300 shadow-inner group-hover/input:border-charcoal/40"
                   />
@@ -166,10 +191,15 @@ export const Footer: React.FC = () => {
                     whileHover={{ scale: 1.08, backgroundColor: "var(--terracotta, #c86d51)" }}
                     whileTap={{ scale: 0.92 }}
                     type="submit"
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-charcoal text-ivory rounded-lg flex items-center justify-center transition-colors shadow-md"
+                    disabled={isSubmitting}
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-9 h-9 bg-charcoal text-ivory rounded-lg flex items-center justify-center transition-colors shadow-md disabled:opacity-50"
                     aria-label="Subscribe"
                   >
-                    <ArrowRight className="w-4 h-4" />
+                    {isSubmitting ? (
+                      <span className="w-4 h-4 rounded-full border-2 border-ivory border-t-transparent animate-spin" />
+                    ) : (
+                      <ArrowRight className="w-4 h-4" />
+                    )}
                   </motion.button>
                 </div>
                 <span className="text-[10px] text-charcoal/50 uppercase tracking-widest block pt-1">
@@ -189,9 +219,7 @@ export const Footer: React.FC = () => {
               Terms & Conditions
             </Link>
             <Link href="/privacy" className="hover:text-terracotta transition-colors">
-              Cookie Policy 
-
-              
+              Cookie Policy
             </Link>
           </div>
         </div>

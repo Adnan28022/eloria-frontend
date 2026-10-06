@@ -8,7 +8,7 @@ import { motion } from "framer-motion";
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-ivory text-charcoal">
+    <div className="min-h-screen flex flex-col bg-ivory text-charcoal pb-20 xl:pb-0">
       <Navbar />
 
       <main className="flex-grow">
@@ -63,6 +63,53 @@ export default function AboutPage() {
                 className="w-full h-full object-cover" 
               />
             </motion.div>
+          </div>
+
+          {/* Team / Founders */}
+          <div className="mb-32">
+            <div className="text-center mb-16">
+              <span className="text-[10px] uppercase tracking-[0.3em] text-terracotta font-medium block mb-4">The Visionaries</span>
+              <h2 className="font-serif text-3xl md:text-4xl text-charcoal">Meet the Founders</h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-24">
+              {[
+                {
+                  name: "Eleanor Hayes",
+                  role: "Co-Founder & Formulator",
+                  image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop",
+                  bio: "With over 15 years in cosmetic chemistry, Eleanor brings scientific rigor to every Eloria formulation, ensuring maximum efficacy and stability."
+                },
+                {
+                  name: "Sophia Lin",
+                  role: "Co-Founder & Creative Director",
+                  image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?q=80&w=800&auto=format&fit=crop",
+                  bio: "Sophia's background in holistic wellness shapes the sensory experience of Eloria, designing products that delight the senses while soothing the skin."
+                }
+              ].map((founder, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: i * 0.2 }}
+                  className="flex flex-col gap-6 group"
+                >
+                  <div className="relative aspect-[3/4] rounded-3xl overflow-hidden bg-charcoal/5">
+                    <img 
+                      src={founder.image} 
+                      alt={founder.name} 
+                      loading="lazy"
+                      className="w-full h-full object-cover grayscale opacity-90 group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700" 
+                    />
+                  </div>
+                  <div>
+                    <h3 className="font-serif text-2xl text-charcoal">{founder.name}</h3>
+                    <span className="text-[10px] uppercase tracking-widest text-terracotta font-medium block my-2">{founder.role}</span>
+                    <p className="text-charcoal/70 font-light leading-relaxed text-sm mt-3">{founder.bio}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
 
           {/* Core Values */}

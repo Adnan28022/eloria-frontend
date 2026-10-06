@@ -35,17 +35,18 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
 
   const addToWishlist = (product: Product) => {
     setWishlist(prev => {
-      if (prev.find(item => item.id === product.id)) return prev;
+      const productId = product._id || product.id || product.slug;
+      if (prev.find(item => (item._id || item.id || item.slug) === productId)) return prev;
       return [...prev, product];
     });
   };
 
   const removeFromWishlist = (productId: string) => {
-    setWishlist(prev => prev.filter(item => item.id !== productId));
+    setWishlist(prev => prev.filter(item => (item._id || item.id || item.slug) !== productId));
   };
 
   const isInWishlist = (productId: string) => {
-    return wishlist.some(item => item.id === productId);
+    return wishlist.some(item => (item._id || item.id || item.slug) === productId);
   };
 
   return (

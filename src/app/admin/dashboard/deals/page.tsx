@@ -131,7 +131,7 @@ export default function PromosPage() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg border border-charcoal/5 my-8"
+              className="bg-white rounded-[2rem] shadow-2xl w-full max-w-lg border border-charcoal/5 my-8 flex flex-col max-h-[90vh]"
             >
               <div className="flex items-center justify-between p-6 border-b border-charcoal/5 bg-[#fcfbf9] rounded-t-[2rem]">
                 <div>
@@ -143,7 +143,7 @@ export default function PromosPage() {
                 </button>
               </div>
 
-              <form onSubmit={handleSubmit} className="p-6 space-y-4">
+              <form onSubmit={handleSubmit} className="p-6 space-y-4 overflow-y-auto">
                 {/* Promo Code Generator */}
                 <div className="space-y-1.5">
                   <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/60 flex items-center gap-1">
@@ -169,7 +169,7 @@ export default function PromosPage() {
                 </div>
 
                 {/* Type + Value */}
-                <div className="flex gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                   <div className="w-2/5 space-y-1.5">
                     <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/60">Discount Type *</label>
                     <select
@@ -202,7 +202,7 @@ export default function PromosPage() {
                 </div>
 
                 {/* Usage Limit & Min Order */}
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div className="space-y-1.5">
                     <label className="text-[10px] uppercase tracking-widest font-bold text-charcoal/60 flex items-center gap-1">
                       <Users className="w-3 h-3" /> Usage Limit

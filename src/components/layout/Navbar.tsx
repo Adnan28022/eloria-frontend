@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Menu, 
@@ -31,7 +31,19 @@ const NAV_LINKS = [
   { href: "/contact", label: "Contact", fullLabel: "Contact", icon: Phone },
 ];
 
-export const Navbar: React.FC = () => {
+// Debounce hook
+function useDebounce<T>(value: T, delay: number): T {
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+    return () => clearTimeout(handler);
+  }, [value, delay]);
+  return debouncedValue;
+}
+
+export const Navbar: React.FC = React.memo(() => {
   const { cartCount, openCart } = useCart();
   const { wishlistCount, openWishlist } = useWishlist();
   const pathname = usePathname();
@@ -40,7 +52,10 @@ export const Navbar: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [allProducts, setAllProducts] = useState<any[]>([]);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+
+  const debouncedSearchQuery = useDebounce(searchQuery, 300);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 20);
@@ -49,9 +64,24 @@ export const Navbar: React.FC = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Fetch products ONLY when search is open and query exists
   useEffect(() => {
-    publicApi.getProducts().then(res => setAllProducts(res.data.data)).catch(() => {});
-  }, []);
+    if (isSearchOpen && debouncedSearchQuery.trim()) {
+      setIsSearching(true);
+      publicApi.getProducts({ search: debouncedSearchQuery })
+        .then(res => {
+          setSearchResults(res.data?.data?.slice(0, 4) || []);
+        })
+        .catch(() => {
+          setSearchResults([]);
+        })
+        .finally(() => {
+          setIsSearching(false);
+        });
+    } else {
+      setSearchResults([]);
+    }
+  }, [debouncedSearchQuery, isSearchOpen]);
 
   // Close mobile menu on page navigation
   useEffect(() => {
@@ -60,7 +90,7 @@ export const Navbar: React.FC = () => {
 
   // Lock background scroll when mobile menu is open
   useEffect(() => {
-    if (isMobileMenuOpen) {
+    if (isMobileMenuOpen || isSearchOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
@@ -68,9 +98,8 @@ export const Navbar: React.FC = () => {
     return () => {
       document.body.style.overflow = "unset";
     };
-  }, [isMobileMenuOpen]);
+  }, [isMobileMenuOpen, isSearchOpen]);
 
-  const searchResults = allProducts.filter(p => p.name.toLowerCase().includes(searchQuery.toLowerCase())).slice(0, 4);
   const textColor = isScrolled ? "text-charcoal" : "text-ivory";
 
   return (
@@ -304,7 +333,7 @@ export const Navbar: React.FC = () => {
                         <span className="font-serif text-xl tracking-wide">{item.label}</span>
                         <div className="flex items-center gap-2">
                           {item.badge && (
-                            <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
+                           <span className={`text-[9px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${
                               isActive ? "bg-white text-terracotta" : "bg-terracotta/15 text-terracotta"
                             }`}>
                               {item.badge}
@@ -395,7 +424,13 @@ export const Navbar: React.FC = () => {
                 />
               </div>
 
-              {searchQuery && (
+              {isSearching && (
+                <div className="text-center text-charcoal/60 mt-10 font-serif text-xl animate-pulse">
+                  Searching formulations...
+                </div>
+              )}
+
+              {debouncedSearchQuery && !isSearching && (
                 <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="grid grid-cols-2 md:grid-cols-4 gap-6">
                   {searchResults.map(product => (
                     <Link href={`/product/${product.slug}`} key={product._id || product.id} onClick={() => setIsSearchOpen(false)}>
@@ -417,7 +452,7 @@ export const Navbar: React.FC = () => {
                   ))}
                   {searchResults.length === 0 && (
                     <div className="col-span-full text-center text-charcoal/40 mt-10 font-serif text-xl">
-                      No results found for "{searchQuery}"
+                      No results found for "{debouncedSearchQuery}"
                     </div>
                   )}
                 </motion.div>
@@ -428,4 +463,5 @@ export const Navbar: React.FC = () => {
       </AnimatePresence>
     </>
   );
-};
+});
+Navbar.displayName = "Navbar";

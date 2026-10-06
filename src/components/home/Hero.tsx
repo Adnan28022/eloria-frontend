@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import Link from "next/link";
 import {
   motion,
@@ -9,20 +9,23 @@ import {
   useTransform,
 } from "framer-motion";
 import { FaLinkedinIn, FaTwitter, FaInstagram, FaFacebookF } from "react-icons/fa";
-import { ArrowDown } from "lucide-react";
+import { preload } from "react-dom";
 
 export const Hero: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
   
-  // Enhanced smoother and wider motion values for a pronounced hover parallax effect
+  // Preload LCP hero image
+  useEffect(() => {
+    preload('/hero-bg.jfif', { as: 'image', fetchPriority: 'high' });
+  }, []);
+
   const mvX = useMotionValue(0);
   const mvY = useMotionValue(0);
   const springX = useSpring(mvX, { stiffness: 40, damping: 25 });
   const springY = useSpring(mvY, { stiffness: 40, damping: 25 });
   
-  // Increased range for a more dynamic and smooth background drift
-  const imgX = useTransform(springX, [-1, 1], [-25, 25]);
-  const imgY = useTransform(springY, [-1, 1], [-18, 18]);
+  const imgX = useTransform(springX, [-1, 1], ["-2.5%", "2.5%"]);
+  const imgY = useTransform(springY, [-1, 1], ["-1.8%", "1.8%"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
     const rect = sectionRef.current?.getBoundingClientRect();
@@ -37,22 +40,29 @@ export const Hero: React.FC = () => {
     <section
       ref={sectionRef}
       onMouseMove={handleMouseMove}
-      className="relative w-full h-screen min-h-[700px] overflow-hidden flex items-center justify-between selection:bg-peach/30"
+      className="relative w-full h-screen min-h-[700px] overflow-hidden flex items-center justify-between selection:bg-peach/30 bg-charcoal"
     >
       {/* Background Image with Enhanced Smooth Mouse Parallax */}
       <motion.div
         style={{
           x: imgX,
           y: imgY,
-          backgroundImage: "url('/hero-bg.jfif')",
         }}
-        className="absolute inset-[-8%] scale-110 bg-cover bg-center transition-transform duration-300 ease-out"
+        className="absolute inset-[-10%] w-[120%] h-[120%] z-0"
         aria-hidden="true"
-      />
+      >
+        <img 
+          src="/hero-bg.jfif" 
+          alt="Eloria natural skincare background"
+          loading="eager"
+          fetchPriority="high"
+          className="w-full h-full object-cover object-center pointer-events-none"
+        />
+      </motion.div>
 
       {/* Cinematic Overlay & Vignette */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/25 to-black/40" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/55 via-transparent to-black/30" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-t from-black/65 via-black/25 to-black/40 pointer-events-none" />
+      <div className="absolute inset-0 z-0 bg-gradient-to-r from-black/55 via-transparent to-black/30 pointer-events-none" />
 
       {/* --- FIXED RIGHT-SIDE WHITE SOCIAL MEDIA ICONS --- */}
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-40 hidden md:flex flex-col items-center gap-3">
@@ -76,7 +86,7 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Main Container */}
-      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 h-full flex flex-col justify-end pb-24 md:py-32">
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-6 md:px-12 h-full flex flex-col justify-end pb-24 md:py-32 pointer-events-auto">
         
         {/* Bottom Area: Large Heading + Contact Pill Button */}
         <div className="flex flex-col lg:flex-row lg:items-end lg:justify-between w-full gap-8">
@@ -133,7 +143,7 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* Mobile Social Icons Bar (Horizontal above dock) */}
-      <div className="md:hidden absolute bottom-24 inset-x-0 z-30 flex items-center justify-center gap-3">
+      <div className="md:hidden absolute bottom-24 inset-x-0 z-30 flex items-center justify-center gap-3 pointer-events-auto">
         {[
           { icon: FaLinkedinIn, href: "#" },
           { icon: FaTwitter, href: "#" },

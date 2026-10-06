@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from "react";
+import React, { useRef, useEffect, useState, memo } from "react";
 import Link from "next/link";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Sparkles, ArrowRight, ArrowUpRight, Star } from "lucide-react";
@@ -55,6 +55,82 @@ const cardVariants = {
   })
 };
 
+const RitualCard = memo(({ item, index }: { item: any, index: number }) => (
+  <motion.div
+    custom={index}
+    variants={cardVariants}
+    initial="hidden"
+    whileInView="visible"
+    viewport={{ once: true, amount: 0.15 }}
+    className="group flex flex-col sm:flex-row gap-8 sm:gap-12 items-center"
+  >
+    {/* Image Area */}
+    <div className="w-full sm:w-1/2 relative">
+      <Link 
+        href={`/product/${item.slug || item._id}`} 
+        className="block relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ivory shadow-[0_8px_30px_rgba(40,30,20,0.06)] group-hover:shadow-[0_16px_40px_rgba(194,142,121,0.18)] transition-all duration-500"
+      >
+        <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center backdrop-blur-[2px]">
+          <div className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center text-charcoal shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+            <ArrowUpRight className="w-6 h-6 text-terracotta" />
+          </div>
+        </div>
+        
+        <img
+          src={item.image || item.images?.[0] || "/prod-1.png"}
+          alt={item.name}
+          loading="lazy"
+          decoding="async"
+          className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-[0.16,1,0.3,1]"
+          onError={(e) => {
+            const target = e.currentTarget as HTMLImageElement;
+            target.src = "/prod-1.png";
+          }}
+        />
+        
+        {item.isBestSeller && (
+          <span className="absolute top-5 left-5 z-20 px-3.5 py-1.5 bg-white/95 backdrop-blur-md text-charcoal text-[9px] uppercase tracking-[0.25em] font-bold rounded-full shadow-md flex items-center gap-1">
+            <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
+            Bestseller
+          </span>
+        )}
+      </Link>
+    </div>
+
+    {/* Details Area */}
+    <div className="w-full sm:w-1/2 flex flex-col justify-center">
+      <div className="space-y-4">
+        <p className="text-[11px] text-terracotta uppercase tracking-[0.25em] font-bold">
+          {item.tagline || "Botanical Formulation"}
+        </p>
+        <h3 className="font-serif text-3xl md:text-4xl text-charcoal font-medium leading-tight group-hover:text-terracotta transition-colors duration-300">
+          <Link href={`/product/${item.slug || item._id}`}>{item.name}</Link>
+        </h3>
+        <p className="text-charcoal/70 text-sm md:text-base font-light leading-relaxed">
+          {item.description}
+        </p>
+        <div className="pt-6 flex items-center justify-between border-t border-charcoal/10">
+          <div className="flex items-center gap-3">
+            <span className="font-serif text-2xl text-charcoal font-medium">{formatPKR(item.price)}</span>
+            {item.originalPrice && item.originalPrice > item.price && (
+              <span className="font-serif text-sm text-charcoal/40 line-through">{formatPKR(item.originalPrice)}</span>
+            )}
+          </div>
+          <Link 
+            href={`/product/${item.slug || item._id}`} 
+            className="text-xs uppercase tracking-[0.2em] font-bold text-charcoal hover:text-terracotta transition-colors py-2 flex items-center gap-1 group/btn"
+          >
+            <span>View Ritual</span>
+            <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
+          </Link>
+        </div>
+      </div>
+    </div>
+  </motion.div>
+));
+
+RitualCard.displayName = "RitualCard";
+
 export const FeaturedRituals: React.FC = () => {
   const containerRef = useRef<HTMLElement>(null);
   const [rituals, setRituals] = useState<any[]>(DEFAULT_RITUALS);
@@ -68,13 +144,10 @@ export const FeaturedRituals: React.FC = () => {
         if (prods && prods.length > 0) {
           setRituals(prods.slice(0, 3));
         } else {
-          // Fallback to latest products if no featured items marked
           publicApi.getProducts()
             .then(fallbackRes => {
               const all = fallbackRes.data?.data;
-              if (all && all.length > 0) {
-                setRituals(all.slice(0, 3));
-              }
+              if (all && all.length > 0) setRituals(all.slice(0, 3));
             })
             .catch(() => {});
         }
@@ -98,7 +171,6 @@ export const FeaturedRituals: React.FC = () => {
 
   return (
     <section ref={containerRef} className="relative w-full bg-[#f4efe6] text-charcoal overflow-hidden">
-      {/* Background Decor - Gentle Parallax */}
       {mounted && (
         <motion.div 
           style={{ y: bgY }}
@@ -109,7 +181,6 @@ export const FeaturedRituals: React.FC = () => {
       <div className="max-w-[1400px] mx-auto px-6 md:px-12 py-20 md:py-28 lg:py-36 relative z-10">
         <div className="flex flex-col lg:flex-row gap-12 lg:gap-24">
           
-          {/* Left Column: Sticky Header */}
           <div className="lg:w-1/3 flex flex-col">
             <div className="lg:sticky lg:top-36 space-y-6">
               <div className="space-y-5">
@@ -164,80 +235,9 @@ export const FeaturedRituals: React.FC = () => {
             </div>
           </div>
 
-          {/* Right Column: Animated Product List */}
           <div className="lg:w-2/3 flex flex-col gap-14 md:gap-20 lg:gap-28 lg:pt-16">
             {rituals.map((item, index) => (
-              <motion.div
-                key={item._id || item.slug || index}
-                custom={index}
-                variants={cardVariants}
-                initial="hidden"
-                whileInView="visible"
-                viewport={{ once: true, amount: 0.15 }}
-                className="group flex flex-col sm:flex-row gap-8 sm:gap-12 items-center"
-              >
-                {/* Image Area */}
-                <div className="w-full sm:w-1/2 relative">
-                  <Link 
-                    href={`/product/${item.slug || item._id}`} 
-                    className="block relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-ivory shadow-[0_8px_30px_rgba(40,30,20,0.06)] group-hover:shadow-[0_16px_40px_rgba(194,142,121,0.18)] transition-all duration-500"
-                  >
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-10 flex items-center justify-center backdrop-blur-[2px]">
-                      <div className="w-16 h-16 rounded-full bg-white/95 flex items-center justify-center text-charcoal shadow-xl translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                        <ArrowUpRight className="w-6 h-6 text-terracotta" />
-                      </div>
-                    </div>
-                    
-                    <img
-                      src={item.image || item.images?.[0] || "/prod-1.png"}
-                      alt={item.name}
-                      className="w-full h-full object-cover object-center group-hover:scale-108 transition-transform duration-700 ease-[0.16,1,0.3,1]"
-                      onError={(e) => {
-                        const target = e.currentTarget as HTMLImageElement;
-                        target.src = "/prod-1.png";
-                      }}
-                    />
-                    
-                    {item.isBestSeller && (
-                      <span className="absolute top-5 left-5 z-20 px-3.5 py-1.5 bg-white/95 backdrop-blur-md text-charcoal text-[9px] uppercase tracking-[0.25em] font-bold rounded-full shadow-md flex items-center gap-1">
-                        <Star className="w-3 h-3 text-amber-500 fill-amber-500" />
-                        Bestseller
-                      </span>
-                    )}
-                  </Link>
-                </div>
-
-                {/* Details Area */}
-                <div className="w-full sm:w-1/2 flex flex-col justify-center">
-                  <div className="space-y-4">
-                    <p className="text-[11px] text-terracotta uppercase tracking-[0.25em] font-bold">
-                      {item.tagline || "Botanical Formulation"}
-                    </p>
-                    <h3 className="font-serif text-3xl md:text-4xl text-charcoal font-medium leading-tight group-hover:text-terracotta transition-colors duration-300">
-                      <Link href={`/product/${item.slug || item._id}`}>{item.name}</Link>
-                    </h3>
-                    <p className="text-charcoal/70 text-sm md:text-base font-light leading-relaxed">
-                      {item.description}
-                    </p>
-                    <div className="pt-6 flex items-center justify-between border-t border-charcoal/10">
-                      <div className="flex items-center gap-3">
-                        <span className="font-serif text-2xl text-charcoal font-medium">{formatPKR(item.price)}</span>
-                        {item.originalPrice && item.originalPrice > item.price && (
-                          <span className="font-serif text-sm text-charcoal/40 line-through">{formatPKR(item.originalPrice)}</span>
-                        )}
-                      </div>
-                      <Link 
-                        href={`/product/${item.slug || item._id}`} 
-                        className="text-xs uppercase tracking-[0.2em] font-bold text-charcoal hover:text-terracotta transition-colors py-2 flex items-center gap-1 group/btn"
-                      >
-                        <span>View Ritual</span>
-                        <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover/btn:translate-x-1" />
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
+              <RitualCard key={item._id || item.slug || index} item={item} index={index} />
             ))}
           </div>
 
